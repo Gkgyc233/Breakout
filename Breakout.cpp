@@ -2,10 +2,16 @@
 //
 
 #include <iostream>
+#include"Settings.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    GameManager gm;
+    while (gm.ifRunning()) {//在没有退出游戏的情况下，不断循环刷新
+        gm.run();
+        gm.draw();
+    }
+    return 0;
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
