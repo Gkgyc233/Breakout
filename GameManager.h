@@ -9,12 +9,13 @@ class GameManager
 	std::string lastgame;
 
 	void Menudraw() {};//主菜单绘制
-	void Settings() {};//进入自定义配置界面//调用配置的类的函数
+	void Settings() {};//调用配置的类的函数
+	void SetDraw() {};//进入自定义配置界面绘制
 	void Lastgame() {};//进入残局设定加载界面//调研残局的类的函数
 	void Stop() {};//进入暂停界面
 	bool Start() {};//开始一局游戏
 public:
-	void draw() {};//整体的绘制函数//根据不同状态调用不同的绘制函数
+	void draw();//整体的绘制函数//根据不同状态调用不同的绘制函数
 	void run() {};//游戏运行，检查输入信号，切换界面
 	bool ifRunning() { return ifrunning; };//游戏是否运行中
 };

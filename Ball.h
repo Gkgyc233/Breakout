@@ -4,7 +4,8 @@
 class Ball
 {
 public:
-	Ball(int gameLevel,int base_v) {}//输入关卡等级与基础速度
+	void setBall(int gameLevel, int base_v,int x,int y,int t);//输入关卡等级,基础速度,位置，方向
+	void linkBaffle(Baffle* b);//关联挡板
 	void ballDraw();//球绘制
 private:
 	int x, y;//坐标

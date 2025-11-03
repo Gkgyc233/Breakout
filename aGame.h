@@ -8,20 +8,19 @@ public:
 	aGame(std::string settings, int gamelevel,
 		std::vector<Brick>& bricks,
 		std::string lastGame
-		) :
-		settings(settings),gamelevel(gamelevel) {
-		readLastGame(lastGame);
-	};//创建一局游戏：配置文件名，关卡等级；残局文件名
-	aGame(std::string settings, int gamelevel) :
-		scores(0), blood(3), width(9),
-		hight(18),settings(settings), gamelevel(gamelevel){};//创建一局游戏：配置文件名，关卡等级
-	void gameGraw() {};//绘制一局游戏内的物品
-	void readLastGame(std::string lastgame){}//读取并加载残局//
-	void newGame() {}//根据配置文件创建新一局游戏
+		);//创建一局游戏：配置文件名，关卡等级；残局文件名
+	aGame(std::string settings, int gamelevel);//创建一局游戏：配置文件名，关卡等级//读取配置文件，初始化游戏
+	void gameGraw() ;//绘制一局游戏内的物品
+	void readLastGame(std::string lastgame);//读取并加载残局
+	void gameRun();
 private:
 	int scores;//分数
 	int blood;//血量
+
+	//配置文件包含的信息
 	int gamelevel;//游戏关卡等级
+	int base_v;
+	int seed;
 
 	Ball ball;//小球
 	Baffle baffle;//挡板
@@ -32,6 +31,6 @@ private:
 	//3.2的残局功能
 	int width, hight;//一局游戏的地图宽高
 	std::vector<Brick> bricks;//砖块与占位符的平铺状态
-	//初始关卡的信息随3.1的配置一起导入
+	//初始关卡gamelevel的信息覆盖3.1的配置
 };
 
