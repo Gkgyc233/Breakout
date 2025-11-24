@@ -12,7 +12,7 @@ public:
 	aGame(std::string settings, int gamelevel);//创建一局游戏：配置文件名，关卡等级//读取配置文件，初始化游戏
 	void gameGraw() ;//绘制一局游戏内的物品
 	void readLastGame(std::string lastgame);//读取并加载残局
-	void gameRun();
+	void gameRun() ;//一局游戏运行
 private:
 	int scores;//分数
 	int blood;//血量

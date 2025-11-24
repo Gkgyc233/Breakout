@@ -129,8 +129,8 @@
     <ClCompile Include="BasicSettings.cpp" />
     <ClCompile Include="Breakout.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="Settings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aGame.h" />
@@ -138,8 +138,8 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="BasicSettings.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="GameManager.h" />
-    <ClInclude Include="Settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

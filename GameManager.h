@@ -1,22 +1,32 @@
 #pragma once//游戏管理器
 #include "BasicSettings.h"
+#include"aGame.h"
+#include "Button.h"
 class GameManager
 {private:
 	int state = 0;//状态参数，0为主菜单，1为自定义配置界面，2为残局设定加载界面，3为游戏内界面，4为暂停保存残局界面
 	bool ifrunning = true;//游戏运行中
+	bool check = true;//是否发生场景转换
+	std::vector<Button*> buttons;
 
-	std::string settings = "default";
-	std::string lastgame;
+	std::wstring settings = L"default";//配置文件名
+	std::wstring lastgame;//残局文件名
 
-	void Menudraw() {};//主菜单绘制
+	aGame* startAGame() {};//依据配置或残局创建新一局游戏，返回创建的游戏类的指针
+	aGame* thisgame;//指向当前游戏的指针
+
+	void Menudraw();//主菜单绘制
+	void MenuCheck();//监测在主页面的操作并做出反映
 	void Settings() {};//调用配置的类的函数
 	void SetDraw() {};//进入自定义配置界面绘制
-	void Lastgame() {};//进入残局设定加载界面//调研残局的类的函数
+	void Lastgame() {};//调用残局的类的函数
+	void LastgameDraw() {};//进入残局设定加载界面绘制
 	void Stop() {};//进入暂停界面
-	bool Start() {};//开始一局游戏
+	void StopDraw() {};//进入暂停界面绘制
+	void Start() {};//开始一局游戏//创建并初始化游戏//改变GameManager的状态
 public:
 	void draw();//整体的绘制函数//根据不同状态调用不同的绘制函数
-	void run() {};//游戏运行，检查输入信号，切换界面
-	bool ifRunning() { return ifrunning; };//游戏是否运行中
+	void run();//游戏运行，检查输入信号，切换界面
+	bool ifRunning() { return ifrunning; };//游戏是否运行中//退出游戏结束程序
 };
 
