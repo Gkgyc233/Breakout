@@ -4,31 +4,37 @@
 #include <conio.h>
 #include<vector>
 #include <string>
+#include<fstream>
+#include <filesystem>
+
 class BasicSettings
 {
 };
 
-const static int ballR = 10;//球半径
-const static int baffleWidth = 50;//挡板厚度
+
+extern const int ballR ;//球半径
+extern const int baffleWidth;//挡板厚度
 
 
-const static int WindowWidth = 1080;
-const static int WindowHeight = 640;
+extern const int WindowWidth ;
+extern const int WindowHeight ;
 
-enum brickType { Durable, Normal, Indestructible, No };//#,@,* 三种砖与没有砖的占位
-
-
-
+extern const std::wstring hz;//配置文件后缀
+extern const std::wstring mr;//配置文件目录
 
 
+class gameSettings {
+public:
+	int basicV = 1;//基础球速
+	int seed = -1;//种子
+	int k = 1;//初始关卡
+};
 
 
-/*
-我们规定：
-gameLevel只影响ball的速度和baffle的宽度；
-ball的实际速度由base_v和gameLevel综合而来
-残局信息覆盖配置信息
 
-*/
+
+
+
+
 
 

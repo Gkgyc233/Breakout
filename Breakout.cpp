@@ -19,8 +19,9 @@ int main()
         SetWorkingImage(&img); // 切换回内存缓冲区
         Sleep(10);
     }
-    return 0;
     closegraph();
+    return 0;
+
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
