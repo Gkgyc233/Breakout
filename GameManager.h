@@ -16,6 +16,8 @@ class GameManager
 	gameSettings set;
 	std::wstring lastgame;//残局文件名
 
+
+	bool newgame = true;//是创建一局游戏还是继续游戏
 	aGame* startAGame() {};//依据配置或残局创建新一局游戏，返回创建的游戏类的指针
 	aGame* thisgame;//指向当前游戏的指针
 
@@ -28,9 +30,11 @@ class GameManager
 
 	void Lastgame() {};//调用残局的类的函数
 	void LastgameDraw() {};//进入残局设定加载界面绘制
+
 	void Stop() {};//进入暂停界面
 	void StopDraw() {};//进入暂停界面绘制
-	void Start() {};//开始一局游戏//创建并初始化游戏//改变GameManager的状态
+	void Start() {};//进入游戏状态与游戏进行
+	//游戏界面的绘制直接有aGame的绘制函数完成
 public:
 	GameManager();
 	void draw();//整体的绘制函数//根据不同状态调用不同的绘制函数

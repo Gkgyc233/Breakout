@@ -22,7 +22,7 @@ void GameManager::run() {
 	case 0:MenuCheck(); break;
 	case 1:Settings(); break;
 	case 2:Lastgame(); break;
-	case 3:thisgame->gameRun(); break;
+	case 3:Start(); break;
 	case 4:Stop(); break;
 	}
 	
@@ -278,3 +278,21 @@ void GameManager::create(){
 	check = true;
 }
 
+void GameManager::Start() {
+	if (check) {
+		check = false;
+		if (newgame) {
+			newgame = false;
+			//TODO
+		}//创建一局游戏(根据配置文件或残局)
+	}
+	//进行游戏
+	if (!thisgame->ifend()) {
+		thisgame->gameRun();
+	}
+	else {//游戏结束，回到主页面
+		state = 0;
+		check = true;
+		newgame = true;
+	}
+}
