@@ -1,4 +1,4 @@
-#pragma once
+#pragma once//ÓÎÏ·ÀïµÄµ²°å
 #include "BasicSettings.h"
 class Baffle
 {

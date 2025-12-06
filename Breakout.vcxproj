@@ -102,6 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,6 +130,8 @@
     <ClCompile Include="BasicSettings.cpp" />
     <ClCompile Include="Breakout.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="GameManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aGame.h" />
@@ -136,6 +139,8 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="BasicSettings.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="GameManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
