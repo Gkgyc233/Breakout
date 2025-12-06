@@ -11,8 +11,9 @@ class GameManager
 	bool check = true;//是否发生场景转换
 	std::vector<Button*> buttons;
 
+	std::vector<std::wstring> allSettingsName;
 	std::wstring settings = L"default";//配置文件名
-	gameSettings s;
+	gameSettings set;
 	std::wstring lastgame;//残局文件名
 
 	aGame* startAGame() {};//依据配置或残局创建新一局游戏，返回创建的游戏类的指针

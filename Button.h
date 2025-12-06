@@ -46,5 +46,8 @@ public:
 	int uid() { return id; }
 	void See() { ifsee = true; }
 	void noSee() { ifsee = false; }
+	int giveY() { return y; }
+	void moveY(int dy) { y += dy;}
+	std::wstring Word() { return word; }
 };
 
