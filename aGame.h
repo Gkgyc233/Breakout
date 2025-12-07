@@ -6,7 +6,7 @@
 class aGame
 {
 public:
-	aGame() {}
+	aGame() {};
 	void gameGraw() ;//绘制一局游戏内的物品
 	void readLastGame(std::string lastgame);//读取并加载残局
 	void gameRun() ;//一局游戏运行
