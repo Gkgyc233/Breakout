@@ -3,9 +3,15 @@
 class Baffle
 {
 public:
-	void baffleDraw();
+	Baffle() {};
+	void baffleDraw();//绘制挡板
+	void baffleMove();//移动挡板
+	int getMid() { return x+length/2; };
+	int gety() { return y; };
+	void setSpeed(int spd) { speed = spd; };//设置挡板速度
 private:
-	int x, y;//坐标
-	int lengt;//挡板长度
+	int length = WindowWidth*5/27;//挡板长度200px
+	int x =(780-length)/2, y=480;//初始坐标
+	int speed = 0;
 };
 

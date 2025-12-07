@@ -6,6 +6,7 @@
 #include <string>
 #include<fstream>
 #include <filesystem>
+#include <math.h>
 
 class BasicSettings
 {
@@ -22,6 +23,10 @@ extern const int WindowHeight ;
 extern const std::wstring hz;//配置文件后缀
 extern const std::wstring mr;//配置文件目录
 
+extern const std::wstring lastgame_prefix;//残局文件前缀
+extern const std::wstring lastgame_postfix;//残局文件后缀
+
+extern const float g;//重力加速度
 
 class gameSettings {
 public:

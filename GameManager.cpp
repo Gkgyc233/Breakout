@@ -1,9 +1,14 @@
 #include"GameManager.h"
 GameManager::GameManager() {
 	std::ifstream o(mr + settings + hz, std::ios::in | std::ios::binary);
-	if (o.is_open()) { o.read((char*)&set, sizeof(set)); o.close(); }
-	else { std::ofstream o(mr + settings + hz, std::ios::out | std::ios::binary);
-	o.write((char*)&set, sizeof(set)); o.close();
+	if (o.is_open()) {
+		o.read((char*)&set, sizeof(set));
+		o.close();
+	}
+	else {
+		std::ofstream o(mr + settings + hz, std::ios::out | std::ios::binary);
+		o.write((char*)&set, sizeof(set)); 
+		o.close();
 	}
 }
 
@@ -13,7 +18,7 @@ void GameManager::draw() {
 	case 0:Menudraw(); break;
 	case 1:SetDraw(); break;
 	case 2:LastgameDraw(); break;
-	case 3:thisgame->gameGraw(); break;
+	case 3:thisgame->gameDraw(); break;
 	case 4:StopDraw(); break;
 	}
 };
@@ -283,7 +288,9 @@ void GameManager::Start() {
 		check = false;
 		if (newgame) {
 			newgame = false;
-			//TODO
+			thisgame = startAGame();
+			//先把不做配置和残局的默认状况下的开始游戏写了
+			//TODO：把根据配置和残局创建游戏的部分写了
 		}//创建一局游戏(根据配置文件或残局)
 	}
 	//进行游戏
@@ -295,4 +302,10 @@ void GameManager::Start() {
 		check = true;
 		newgame = true;
 	}
+}
+
+aGame* GameManager::startAGame() {
+	aGame* game = new aGame(set);
+
+	return game;
 }

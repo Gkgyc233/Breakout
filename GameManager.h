@@ -18,7 +18,7 @@ class GameManager
 
 
 	bool newgame = true;//是创建一局游戏还是继续游戏
-	aGame* startAGame() {};//依据配置或残局创建新一局游戏，返回创建的游戏类的指针
+	aGame* startAGame() ;//依据配置或残局创建新一局游戏，返回创建的游戏类的指针
 	aGame* thisgame;//指向当前游戏的指针
 
 	void Menudraw();//主菜单绘制

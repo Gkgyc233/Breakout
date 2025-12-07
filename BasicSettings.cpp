@@ -13,8 +13,10 @@ enum brickType { Durable, Normal, Indestructible, No };//#,@,* ÈıÖÖ×©ÓëÃ»ÓĞ×©µÄÕ
 const std::wstring hz = L".config";
 const std::wstring mr = L".\\config\\";
 
+const std::wstring lastgame_prefix = L".\\endgames\\";
+const std::wstring lastgame_postfix = L".end";
 
-
+const float g = 0.3;//ÖØÁ¦¼ÓËÙ¶È
 /*
 ÎÒÃÇ¹æ¶¨£º
 gameLevelÖ»Ó°ÏìballµÄËÙ¶ÈºÍbaffleµÄ¿í¶È£»
