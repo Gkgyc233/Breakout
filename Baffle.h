@@ -13,7 +13,7 @@ public:
 	bool hitLeftWall() { return x <= 40; };//检测是否碰到左边墙壁
 	bool hitRightWall() { return x + length >= 740; };//检测是否碰到右边墙壁
 private:
-	int length = WindowWidth*5/27;//挡板长度200px
+	int length = WindowWidth*6/27;//挡板长度240px
 	int x =(780-length)/2, y=480;//初始坐标
 };
 

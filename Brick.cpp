@@ -24,12 +24,21 @@ void Brick::check(Ball* ball,aGame* game) {//检测与球的碰撞并处理
 			brickType = 0;
 		}
 		//坚不可摧砖不受影响
-		if (info->collisionY == y || info->collisionY == y + h) {//如果球撞到了砖的水平面
-			ball->bounce('x');//反弹
-
+		if (info->collisionY == y + h) {//如果球撞到了砖的水平面
+			ball->sety(float(y + h + ballR));
+			ball->bounce('x');
 		}
-		if (info->collisionX == x || info->collisionX == x + w) {//如果球撞到了砖的垂直面
-			ball->bounce('y');//反弹
+		if (info->collisionY == y) {
+			ball->sety(float(y - ballR));
+			ball->bounce('x');
+		}
+		if (info->collisionX == x) {//如果球撞到了砖的垂直面
+			ball->setx(float(x - ballR));
+			ball->bounce('y');
+		}
+		if (info->collisionX == x + w) {
+			ball->setx(float(x + w + ballR));
+			ball->bounce('y');
 		}
 		//注：如果正好撞到角上，两个bounce都会执行。
 	}

@@ -14,7 +14,7 @@ void Ball::linkBaffle(Baffle* b) {//让球出现在挡板中间正上方。换句话说，就是关联
 
 void Ball::setBall(int gameLevel, int base_v,int t) {
 	this->base_v = base_v;
-	this->real_v = 7*base_v + gameLevel; // 实际速度根据基础速度和关卡等级计算
+	this->real_v = 10*base_v + gameLevel; // 实际速度根据基础速度和关卡等级计算
 	this->theta = t;
 	this->frozen = true;
 	vx = real_v * 1.0 * cos(theta*pi/180.0);//计算速度分量

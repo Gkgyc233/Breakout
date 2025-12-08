@@ -2,7 +2,7 @@
 
 
 const int ballR = 10;//Çò°ë¾¶
-const int baffleWidth = 50;//µ²°åºñ¶È
+const int baffleWidth = 40;//µ²°åºñ¶È
 const int baffleSpeed = 8;//µ²°åËÙ¶È
 
 const int WindowWidth = 1080;

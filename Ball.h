@@ -15,6 +15,8 @@ public:
 	void ballRun(Map* map,aGame* game);//球的逻辑运行
 	float getx() { return x; };
 	float gety() { return y; };
+	void sety(float yy) { y = yy; };
+	void setx(float xx) { x = xx; };
 	void bounce(char mode);//根据碰撞方式计算反弹，mode==x表示从撞到水平面上反弹，mode==y表示撞到垂直面上反弹
 	void displayInfo();//显示球的信息，调试用
 	bool isFrozen() { return frozen; };
