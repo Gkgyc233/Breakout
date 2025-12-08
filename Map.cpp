@@ -1,7 +1,7 @@
 #include "Map.h"
 #include "Brick.h"
 #include "Ball.h"
-Map::Map(int xBlockNum , int yBlockNum ) {//默认的地图：9*5，全部为普通砖。
+Map::Map(int xBlockNum , int yBlockNum ,int level) {//默认的地图：9*5，砖的类型随gamelevel变化。
 	this->xBlockNum = xBlockNum;
 	this->yBlockNum = yBlockNum;
 	this->BlockWidth = 700 / xBlockNum;
@@ -12,7 +12,8 @@ Map::Map(int xBlockNum , int yBlockNum ) {//默认的地图：9*5，全部为普通砖。
 	for (int x = 0; x < xBlockNum; x++) {
 		this->bricks.push_back(std::vector<Brick>());
 		for (int y = 0; y < yBlockNum; y++) {
-			this->bricks[x].push_back(Brick(cur_x,cur_y,BrickHeight,BrickWidth));
+			int type = getRandType(level);
+			this->bricks[x].push_back(Brick(cur_x, cur_y, BrickHeight, BrickWidth, type));//TODO:根据level调整砖块类型
 			cur_y += BlockHeight;
 		}
 		cur_x += BlockWidth;

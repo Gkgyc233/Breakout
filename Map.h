@@ -6,7 +6,7 @@ class Brick;//前向声明
 class Map
 {
 public:
-	Map(int xBlockNum = 9,int yBlockNum = 5);
+	Map(int xBlockNum = 9,int yBlockNum = 5, int level=1);
 	void mapDraw();
 	bool is_empty();//判断地图上是否还有可摧毁砖块
 	void check(Ball* ball,aGame* game);//检测球与砖块的碰撞并处理

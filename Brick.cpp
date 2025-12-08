@@ -26,6 +26,7 @@ void Brick::check(Ball* ball,aGame* game) {//检测与球的碰撞并处理
 		//坚不可摧砖不受影响
 		if (info->collisionY == y || info->collisionY == y + h) {//如果球撞到了砖的水平面
 			ball->bounce('x');//反弹
+
 		}
 		if (info->collisionX == x || info->collisionX == x + w) {//如果球撞到了砖的垂直面
 			ball->bounce('y');//反弹

@@ -14,31 +14,31 @@ void Ball::linkBaffle(Baffle* b) {//让球出现在挡板中间正上方。换句话说，就是关联
 
 void Ball::setBall(int gameLevel, int base_v,int t) {
 	this->base_v = base_v;
-	this->real_v = 5*base_v + gameLevel; // 实际速度根据基础速度和关卡等级计算
+	this->real_v = 7*base_v + gameLevel; // 实际速度根据基础速度和关卡等级计算
 	this->theta = t;
-	vx = real_v * 1.0 * cos(theta);//计算速度分量
-	vy = -real_v * 1.0 * sin(theta);
+	this->frozen = true;
+	vx = real_v * 1.0 * cos(theta*pi/180.0);//计算速度分量
+	vy = -real_v * 1.0 * sin(theta*pi/180.0);
 }
 
 void Ball::ballMove() {
-	//vx =   real_v * 1.0 * cos(theta);//计算速度分量
-	//vy = - real_v * 1.0 * sin(theta);
+	if (this->isFrozen()) return;
+	vx =   real_v * 1.0 * cos(theta*pi/180.0);//计算速度分量
+	vy = - real_v * 1.0 * sin(theta*pi/180.0);
 	x += vx;//更新位置
 	y += vy;
 	vy += g;//施加重力加速度
 	real_v = sqrt(vx * vx + vy * vy);//更新实际速度
-	theta = atan2(-vy, vx);//更新方向角度
+	theta = atan2(-vy, vx)/pi*180;//更新方向角度
+	return;
 }
 
 void Ball::collideWithBaffle() {
 	CollisionInfo* info = collide(x, y, ballR, baffle->getx(), baffle->gety(), baffle->getlength(), baffleWidth);//判断球与版是否碰撞
 	if (info->collided && (info->collisionY - baffle->gety())<=20) {//若碰撞到挡板的水平面
 		float dx = (info->collisionX - baffle->getMid())*1.0/(baffle->getlength());//计算碰撞点与挡板中点的归一化水平距离
-		if (theta>=0) theta = 180 - theta;//垂直反弹
-		else theta = -180 - theta;
-		theta += dx * 7.0;//根据碰撞点调整反弹角度，最大偏转75度
-		vx = real_v * 1.0 * cos(theta);//计算速度分量
-		vy = -real_v * 1.0 * sin(theta);
+		//bounce('x');
+		theta = 90 - dx * 50.0;//根据碰撞点调整反弹角度，最大偏转50度
 		y = baffle->gety() - ballR;//调整位置，防止卡在挡板内
 		//TODO:根据碰撞点调整反弹角度
 	}
@@ -47,6 +47,8 @@ void Ball::collideWithBaffle() {
 }
 
 void Ball::ballRun(Map* map,aGame* game) {
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000) defroze();//按下空格发球
+	if (isFrozen()) return;//若未发球，则不运行后面代码
 	collideWithBaffle();//与挡板碰撞检测与反弹
 	if (x - ballR <= 40) {//与左右墙壁碰撞检测与反弹
 		bounce('y');
@@ -66,11 +68,13 @@ void Ball::ballRun(Map* map,aGame* game) {
 
 void Ball::bounce(char mode) {
 	if (mode == 'y') {//撞到垂直面上反弹
-		vx *= -1;
-
+		//vx *= -1;
+		if (theta < 0) theta = -180 - theta;
+		else theta = 180 - theta;
 	}
 	else if(mode=='x'){//撞到水平面上反弹
-		vy *= -1;
+		//vy *= -1;
+		theta *= -1;
 	}
 	return;
 }
@@ -78,12 +82,12 @@ void Ball::bounce(char mode) {
 void Ball::displayInfo() {
 	settextcolor(WHITE);
 	std::basic_ostringstream<TCHAR> oss;//建立字符串流
-	oss << _T("ball.theta: ") << theta;
+	oss << _T("theta: ") << theta;
 	outtextxy(800, 220, (oss.str()).c_str());//输出角度
 	oss.str(_T(""));//清空字符串流
-	oss << _T("ball.vx: ") << vx;
+	oss << _T("vx: ") << vx;
 	outtextxy(800, 280, (oss.str()).c_str());
 	oss.str(_T(""));
-	oss << _T("ball.vy: ") << vy;
+	oss << _T("vy: ") << vy;
 	outtextxy(800, 340, (oss.str()).c_str());
 }

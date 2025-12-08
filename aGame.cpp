@@ -12,7 +12,7 @@ void aGame::gameRun() {
 			ifEnd = true;
 		}
 		else {
-			ball->setBall(level, this->settings.basicV, 30);//重置球状态
+			ball->setBall(level, this->settings.basicV);//重置球状态
 			ball->linkBaffle(baffle);//重新将球放回挡板上
 		}
 	}
@@ -38,7 +38,7 @@ aGame::aGame(gameSettings set) {
 	this->scores = 0;
 	this->blood = 3;
 	this->level = set.k;
-	ball->setBall(level, set.basicV, 30);
+	ball->setBall(level, set.basicV);
 	ball->linkBaffle(baffle);
 }
 

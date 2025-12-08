@@ -10,6 +10,9 @@
 #include <algorithm>
 #include <sstream>
 #include <tchar.h>
+#include <random>
+
+#define pi 3.1415926
 
 class BasicSettings
 {
@@ -45,6 +48,8 @@ struct CollisionInfo {//碰撞信息
 };
 
 CollisionInfo* collide(int ball_x, int ball_y, int r, int rect_x, int rect_y, int rect_width, int rect_height);//判断球与矩形的碰撞
+
+int getRandType(int level);//根据关卡等级返回随机砖块类型
 
 
 
