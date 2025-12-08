@@ -1,6 +1,8 @@
 #pragma once//球
 #include"BasicSettings.h"
 #include"Baffle.h"
+class Map;//前向声明
+class aGame;//前向声明
 class Ball
 {
 public:
@@ -8,8 +10,16 @@ public:
 	void linkBaffle(Baffle* b);//关联挡板
 	void ballDraw();//球绘制
 	void ballMove();//球移动
+	void collideWithBaffle();//与挡板碰撞检测与反弹
+	bool fall() { return y - ballR > WindowHeight; };//检测球是否掉落出屏幕
+	void ballRun(Map* map,aGame* game);//球的逻辑运行
+	float getx() { return x; };
+	float gety() { return y; };
+	void bounce(char mode);//根据碰撞方式计算反弹，mode==x表示从撞到水平面上反弹，mode==y表示撞到垂直面上反弹
+	void displayInfo();//显示球的信息，调试用
 private:
 	float x, y;//坐标
+	float vx, vy;
 	int base_v;//基础球速
 	float real_v;//实际计算得到球速
 	float theta;//速度方向角度（角度制）

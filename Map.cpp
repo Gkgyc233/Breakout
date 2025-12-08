@@ -1,10 +1,11 @@
 #include "Map.h"
 #include "Brick.h"
+#include "Ball.h"
 Map::Map(int xBlockNum , int yBlockNum ) {//默认的地图：9*5，全部为普通砖。
 	this->xBlockNum = xBlockNum;
 	this->yBlockNum = yBlockNum;
 	this->BlockWidth = 700 / xBlockNum;
-	this->BlockHeight = 400 / yBlockNum;
+	this->BlockHeight = 200 / yBlockNum;
 	this->BrickHeight = BlockHeight * 9 / 10;
 	this->BrickWidth = BlockWidth * 9 / 10;
 	int cur_x = 45, cur_y = 45;
@@ -42,4 +43,12 @@ void Map::mapDraw() {
 		}
 	}
 	return;
+}
+
+void Map::check(Ball* ball,aGame* game) {//判断球与砖的碰撞并处理
+	for (int i = 0; i < xBlockNum; i++){
+		for (int j = 0; j < yBlockNum; j++  ) {
+			bricks[i][j].check(ball,game);
+		}
+	}
 }

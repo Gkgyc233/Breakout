@@ -7,6 +7,9 @@
 #include<fstream>
 #include <filesystem>
 #include <math.h>
+#include <algorithm>
+#include <sstream>
+#include <tchar.h>
 
 class BasicSettings
 {
@@ -15,7 +18,7 @@ class BasicSettings
 
 extern const int ballR ;//球半径
 extern const int baffleWidth;//挡板厚度
-
+extern const int baffleSpeed;//挡板速度
 
 extern const int WindowWidth ;
 extern const int WindowHeight ;
@@ -35,6 +38,13 @@ public:
 	int k = 1;//初始关卡
 };
 
+struct CollisionInfo {//碰撞信息
+	bool collided = false;//是否碰撞
+	float collisionX = -1;//碰撞点x坐标
+	float collisionY = -1;//碰撞点y坐标
+};
+
+CollisionInfo* collide(int ball_x, int ball_y, int r, int rect_x, int rect_y, int rect_width, int rect_height);//判断球与矩形的碰撞
 
 
 

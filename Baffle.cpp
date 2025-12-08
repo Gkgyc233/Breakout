@@ -6,6 +6,6 @@ void Baffle::baffleDraw() {//ªÊ÷∆µ≤∞Â
 }
 
 void Baffle::baffleMove(){//“∆∂Øµ≤∞Â
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000) x -= 5;
-	else if (GetAsyncKeyState(VK_RIGHT) & 0x8000) x += 5;
+	if ((GetAsyncKeyState(VK_LEFT) & 0x8000)&&!hitLeftWall()) x -= baffleSpeed;
+	else if ((GetAsyncKeyState(VK_RIGHT) & 0x8000)&&!hitRightWall()) x += baffleSpeed;
 }
