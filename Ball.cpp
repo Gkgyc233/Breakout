@@ -14,21 +14,23 @@ void Ball::linkBaffle(Baffle* b) {//让球出现在挡板中间正上方。换句话说，就是关联
 
 void Ball::setBall(int gameLevel, int base_v,int t) {
 	this->base_v = base_v;
-	this->real_v = 10*base_v + gameLevel; // 实际速度根据基础速度和关卡等级计算
+	this->real_v = 8*base_v + gameLevel; // 实际速度根据基础速度和关卡等级计算
 	this->theta = t;
 	this->frozen = true;
+	this->limit_v = 1.6 * this->real_v;//速度上限
 	vx = real_v * 1.0 * cos(theta*pi/180.0);//计算速度分量
 	vy = -real_v * 1.0 * sin(theta*pi/180.0);
 }
 
 void Ball::ballMove() {
 	if (this->isFrozen()) return;
+	//if (real_v > limit_v) real_v = limit_v;
 	vx =   real_v * 1.0 * cos(theta*pi/180.0);//计算速度分量
 	vy = - real_v * 1.0 * sin(theta*pi/180.0);
 	x += vx;//更新位置
 	y += vy;
-	vy += g;//施加重力加速度
-	real_v = sqrt(vx * vx + vy * vy);//更新实际速度
+	//vy += g;//施加重力加速度
+	//real_v = sqrt(vx * vx + vy * vy);//更新实际速度
 	theta = atan2(-vy, vx)/pi*180;//更新方向角度
 	return;
 }

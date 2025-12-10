@@ -2,10 +2,10 @@
 
 void Baffle::baffleDraw() {//ªÊ÷∆µ≤∞Â
 	setfillcolor(WHITE);
-	fillrectangle(x, WindowHeight / 4 * 3, x + length, WindowHeight /4*3 + baffleWidth);
+	fillrectangle(x, y, x + length, y + baffleWidth);
 }
 
 void Baffle::baffleMove(){//“∆∂Øµ≤∞Â
-	if ((GetAsyncKeyState(VK_LEFT) & 0x8000)&&!hitLeftWall()) x -= baffleSpeed;
-	else if ((GetAsyncKeyState(VK_RIGHT) & 0x8000)&&!hitRightWall()) x += baffleSpeed;
+	if ((GetAsyncKeyState('A') & 0x8000) && !hitLeftWall()) x -= baffleSpeed;
+	else if ((GetAsyncKeyState('D') & 0x8000) && !hitRightWall()) x += baffleSpeed;
 }

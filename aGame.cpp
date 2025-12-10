@@ -40,6 +40,7 @@ aGame::aGame(gameSettings set) {
 	this->level = set.k;
 	ball->setBall(level, set.basicV);
 	ball->linkBaffle(baffle);
+	baffle->adjustLength(level);
 }
 
 void aGame::displayInfo() {//显示血量、分数,etc.

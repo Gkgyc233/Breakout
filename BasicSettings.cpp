@@ -16,7 +16,7 @@ const std::wstring mr = L".\\config\\";
 const std::wstring lastgame_prefix = L".\\endgames\\";
 const std::wstring lastgame_postfix = L".end";
 
-const float g = 0.3;//重力加速度
+const float g = 0.2;//重力加速度
 
 CollisionInfo* collide(int ball_x, int ball_y, int r, int rect_x, int rect_y, int rect_width, int rect_height) {//判断球与矩形的碰撞
 	CollisionInfo* info = new CollisionInfo;
@@ -28,6 +28,7 @@ CollisionInfo* collide(int ball_x, int ball_y, int r, int rect_x, int rect_y, in
 	if (info->collided) {
 		info->collisionX = clostestX;//记录碰撞点x坐标
 		info->collisionY = clostestY;//记录碰撞点y坐标
+		if (clostestX == ball_x && clostestY == ball_y) info->in = true;//球心在矩形内
 	}
 	return info;
 }

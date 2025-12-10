@@ -15,6 +15,8 @@ public:
 	void ballRun(Map* map,aGame* game);//球的逻辑运行
 	float getx() { return x; };
 	float gety() { return y; };
+	float getvx() { return vx; };
+	float getvy() { return vy; };
 	void sety(float yy) { y = yy; };
 	void setx(float xx) { x = xx; };
 	void bounce(char mode);//根据碰撞方式计算反弹，mode==x表示从撞到水平面上反弹，mode==y表示撞到垂直面上反弹
@@ -26,6 +28,7 @@ private:
 	float vx, vy;
 	int base_v;//基础球速
 	float real_v;//实际计算得到球速
+	float limit_v;//速度上限
 	float theta;//速度方向角度（角度制）
 	bool frozen;//球是否可动（我们希望球在一开始静止，玩家按下空格后再开始移动）
 	Baffle* baffle = nullptr;//该局游戏的挡板对象

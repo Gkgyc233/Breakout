@@ -43,6 +43,7 @@ public:
 
 struct CollisionInfo {//碰撞信息
 	bool collided = false;//是否碰撞
+	bool in = false;//球心是否在矩形内
 	float collisionX = -1;//碰撞点x坐标
 	float collisionY = -1;//碰撞点y坐标
 };
