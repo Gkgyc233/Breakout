@@ -1,20 +1,22 @@
 #pragma once//通用基础信息
-#include<iostream>
+#include <iostream>
 #include <graphics.h>
 #include <conio.h>
-#include<vector>
+#include <vector>
 #include <string>
-#include<fstream>
+#include <fstream>
 #include <filesystem>
 #include <math.h>
 #include <algorithm>
 #include <sstream>
 #include <tchar.h>
 #include <random>
+#include <ctime>
+#include <cstdlib>
 
 #define pi 3.1415926
 
-class BasicSettings
+class Endgame//用于存储残局信息的类
 {
 };
 
@@ -50,7 +52,7 @@ struct CollisionInfo {//碰撞信息
 
 CollisionInfo* collide(int ball_x, int ball_y, int r, int rect_x, int rect_y, int rect_width, int rect_height);//判断球与矩形的碰撞
 
-int getRandType(int level);//根据关卡等级返回随机砖块类型
+std::vector<std::vector<int>>*  getRandType(int level,int seed,int x,int y);//根据关卡等级返回随机砖块类型
 
 
 

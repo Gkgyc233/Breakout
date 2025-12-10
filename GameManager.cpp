@@ -21,6 +21,7 @@ void GameManager::draw() {
 	case 3:thisgame->gameDraw(); break;
 	case 4:StopDraw(); break;
 	case 5:WinDraw(); break;
+	case 6:LoseDraw(); break;
 	}
 };
 void GameManager::run() {
@@ -31,6 +32,7 @@ void GameManager::run() {
 	case 3:Start(); break;
 	case 4:Stop(); break;
 	case 5:Win(); break;
+	case 6:Lose(); break;
 	}
 	
 };
@@ -295,13 +297,13 @@ void GameManager::Start() {
 		if (newgame) {
 			newgame = false;
 			thisgame = startAGame();
-			//先把不做配置和残局的默认状况下的开始游戏写了
-			//TODO：把根据配置和残局创建游戏的部分写了
+			
+			//TODO：根据残局创建游戏
 		}//创建一局游戏(根据配置文件或残局)
 	}
 	//进行游戏
-	if (thisgame->ifend()) {//游戏结束，回到主页面
-		state = 0;
+	if (thisgame->ifend()) {//游戏结束，移动到失败界面
+		state = 6;
 		check = true;
 		newgame = true;
 	}
@@ -398,10 +400,52 @@ void GameManager::Win() {
 void GameManager::WinDraw() {
 	settextcolor(WHITE);//绘制“胜利”
 	settextstyle(WindowHeight / 12, 0, _T("Consolas"));
-	outtextxy((WindowWidth - textwidth(L"你过关！")) / 2, WindowHeight / 6, L"你过关！");
+	outtextxy((WindowWidth - textwidth(L"你过关")) / 2, WindowHeight / 6, L"你过关！");
 	std::basic_ostringstream<TCHAR> oss;//建立字符串流
 	oss << _T("当前分数: ") << thisgame->getScore();//输出分数
-	LPCTSTR word = (oss.str()).c_str();
+	std::basic_string<TCHAR> str = oss.str();
+	LPCTSTR word = (str).c_str();
+	outtextxy((WindowWidth - textwidth(word)) / 2, WindowHeight / 3, word);
+	for (auto i : buttons) {
+		i->draw();
+	}
+}
+
+void GameManager::Lose() {
+	if (check) {
+		while (!buttons.empty()) {
+			delete buttons.back();
+			buttons.pop_back();
+		}
+		check = false;
+		Button* menu = new Button(WindowWidth / 2, WindowHeight / 2, WindowWidth / 3, WindowHeight / 12);
+		menu->setString(L"返回主菜单");
+		menu->setid(0);
+		buttons.push_back(menu);
+	}
+	if (peekmessage(m, EX_MOUSE)) {
+		if (m->message == WM_LBUTTONDOWN) {
+			int x = m->x; int y = m->y;
+			for (Button* i : buttons) {//检查按钮触发
+				if (i->ifIn(x, y)) {
+					switch (i->uid()) {
+					case 0: { check = true; state = 0; break; }
+					}
+					break;
+				}
+			}
+		}
+	}
+}
+
+void GameManager::LoseDraw() {
+	settextcolor(WHITE);//绘制“GameOver”
+	settextstyle(WindowHeight / 12, 0, _T("Consolas"));
+	outtextxy((WindowWidth - textwidth(L"该罚")) / 2, WindowHeight / 6, L"该罚！");
+	std::basic_ostringstream<TCHAR> oss;//建立字符串流
+	oss << _T("分数: ") << thisgame->getScore();//输出分数
+	std::basic_string<TCHAR> str = oss.str();
+	LPCTSTR word = (str).c_str();
 	outtextxy((WindowWidth - textwidth(word)) / 2, WindowHeight / 3, word);
 	for (auto i : buttons) {
 		i->draw();

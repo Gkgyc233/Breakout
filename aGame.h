@@ -25,6 +25,8 @@ private:
 	bool ifEnd = false;
 	bool ifWin = false;//是否在通关状态
 	int level;//关卡
+	int xBlockNum = 9;//横向格子数（3.2.1）//TODO:根据残局更改横纵格子数
+	int yBlockNum = 10;//纵向格子数（注：因为要放挡板和小球，只有上面一半的格子才会被砖占着）
 	Ball* ball;//小球
 	Baffle* baffle;//挡板
 	//3.1的配置功能

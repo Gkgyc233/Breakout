@@ -1,7 +1,7 @@
 #include "Baffle.h"
 
 void Baffle::baffleDraw() {//ªÊ÷∆µ≤∞Â
-	setfillcolor(WHITE);
+	setfillcolor(BROWN);
 	fillrectangle(x, y, x + length, y + baffleWidth);
 }
 

@@ -3,7 +3,7 @@
 void Ball::ballDraw() {
 	setfillcolor(WHITE);
 	fillcircle(x, y, ballR);
-	displayInfo();//显示调试信息
+	//displayInfo();//显示调试信息
 }
 
 void Ball::linkBaffle(Baffle* b) {//让球出现在挡板中间正上方。换句话说，就是关联挡板的过程本身就确定了球的初始位置。

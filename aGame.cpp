@@ -22,6 +22,9 @@ void aGame::gameRun() {
 	if (GetAsyncKeyState('C') & 0x8000) {//调试用，清图
 		map->clear();
 	}
+	if (GetAsyncKeyState('B') & 0x8000) {//调试用，加血
+		blood++;
+	}
 }
 
 void aGame::gameDraw() {
@@ -40,7 +43,7 @@ aGame::aGame(gameSettings set) {
 	this->settings = set;
 	this->baffle = new Baffle();
 	this->ball = new Ball();
-	this->map = new Map();
+	this->map = new Map(set.seed,xBlockNum,yBlockNum/2,set.k);
 	this->scores = 0;
 	this->blood = 3;
 	this->level = set.k;
@@ -74,5 +77,5 @@ void aGame::nextLevel() {//进入下一关
 	ball->linkBaffle(baffle);//重新将球放回挡板上
 	baffle->adjust(level);//调整挡板长度和速度
 	delete map;
-	map = new Map(9, 5, level);//创建新地图
+	map = new Map(settings.seed,xBlockNum,yBlockNum/2,level);//创建新地图
 }

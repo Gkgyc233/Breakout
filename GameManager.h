@@ -17,6 +17,7 @@ class GameManager
 	std::wstring lastgame;//残局文件名
 
 
+
 	bool newgame = true;//是创建一局游戏还是继续游戏
 	bool nextlevel = false;//是否进入下一关
 	aGame* startAGame() ;//依据配置或残局创建新一局游戏，返回创建的游戏类的指针
@@ -39,6 +40,8 @@ class GameManager
 
 	void Win();//胜利界面
 	void WinDraw();//胜利界面绘制
+	void Lose();//失败界面
+	void LoseDraw();//失败界面绘制
 
 public:
 	GameManager();

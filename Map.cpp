@@ -1,7 +1,8 @@
 #include "Map.h"
 #include "Brick.h"
 #include "Ball.h"
-Map::Map(int xBlockNum , int yBlockNum ,int level) {//Ä¬ÈÏµÄµØÍ¼£º9*5£¬×©µÄÀàĞÍËægamelevel±ä»¯¡£
+#include <vector>
+Map::Map(int seed,int xBlockNum , int yBlockNum ,int level) {//Ä¬ÈÏµÄµØÍ¼£º9*5£¬×©µÄÀàĞÍËægamelevel±ä»¯¡£
 	this->xBlockNum = xBlockNum;
 	this->yBlockNum = yBlockNum;
 	this->BlockWidth = 700 / xBlockNum;
@@ -9,16 +10,18 @@ Map::Map(int xBlockNum , int yBlockNum ,int level) {//Ä¬ÈÏµÄµØÍ¼£º9*5£¬×©µÄÀàĞÍË
 	this->BrickHeight = BlockHeight * 9 / 10;
 	this->BrickWidth = BlockWidth * 9 / 10;
 	int cur_x = 45, cur_y = 45;
+	vector<vector<int>>* type = getRandType(level, seed, xBlockNum, yBlockNum);
 	for (int x = 0; x < xBlockNum; x++) {
 		this->bricks.push_back(std::vector<Brick>());
 		for (int y = 0; y < yBlockNum; y++) {
-			int type = getRandType(level);//¸ù¾İlevelµ÷Õû×©¿éÀàĞÍ
-			this->bricks[x].push_back(Brick(cur_x, cur_y, BrickHeight, BrickWidth, type));//Éú³É×©¿é
+			//int type = getRandType(level,seed);//¸ù¾İlevelµ÷Õû×©¿éÀàĞÍ
+			this->bricks[x].push_back(Brick(cur_x, cur_y, BrickHeight, BrickWidth, (*type)[x][y]));//Éú³É×©¿é
 			cur_y += BlockHeight;
 		}
 		cur_x += BlockWidth;
 		cur_y = 45;
 	}
+	delete type;
 }
 
 bool Map::is_empty() {//¼ì²âÊÇ·ñËùÓĞ¿ÉÒÔ±»´òµôµÄ×©¶¼±»´òµôÁË
