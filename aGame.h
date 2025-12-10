@@ -12,14 +12,18 @@ public:
 	void gameRun() ;//一局游戏运行
 	void gameInit();//通过配置创建一局游戏
 	bool ifend() { return ifEnd; }
+	bool ifwin() { return ifWin; }
 	void displayInfo();//绘制游戏信息（血量、关卡等）
 	void earnScore() { scores++; }//得分
+	int  getScore() { return scores; }//获取分数
+	void nextLevel();//进入下一关
 	gameSettings settings;//三样默认或自定义设置
 private:
 	ExMessage* msg = new ExMessage;
 	int scores;//分数
 	int blood;//血量
 	bool ifEnd = false;
+	bool ifWin = false;//是否在通关状态
 	int level;//关卡
 	Ball* ball;//小球
 	Baffle* baffle;//挡板

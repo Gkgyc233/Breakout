@@ -3,7 +3,7 @@
 
 const int ballR = 10;//Çò°ë¾¶
 const int baffleWidth = 40;//µ²°åºñ¶È
-const int baffleSpeed = 8;//µ²°åËÙ¶È
+//const int baffleSpeed = 8;//µ²°åËÙ¶È
 
 const int WindowWidth = 1080;
 const int WindowHeight = 640;
@@ -47,7 +47,8 @@ int getRandType(int level) {
 		return 1; // ÄÍ¾Ã×©
 	}
 	else {
-		return 2; // ¼á²»¿É´Ý×©
+		if (level > 2) return 2; // ¼á²»¿É´Ý×©
+		else return 0;
 	}
 }
 /*

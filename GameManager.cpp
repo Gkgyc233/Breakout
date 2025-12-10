@@ -20,6 +20,7 @@ void GameManager::draw() {
 	case 2:LastgameDraw(); break;
 	case 3:thisgame->gameDraw(); break;
 	case 4:StopDraw(); break;
+	case 5:WinDraw(); break;
 	}
 };
 void GameManager::run() {
@@ -29,6 +30,7 @@ void GameManager::run() {
 	case 2:Lastgame(); break;
 	case 3:Start(); break;
 	case 4:Stop(); break;
+	case 5:Win(); break;
 	}
 	
 };
@@ -286,6 +288,10 @@ void GameManager::create(){
 void GameManager::Start() {
 	if (check) {
 		check = false;
+		if (nextlevel) {
+			nextlevel = false;
+			thisgame->nextLevel();
+		}
 		if (newgame) {
 			newgame = false;
 			thisgame = startAGame();
@@ -294,17 +300,22 @@ void GameManager::Start() {
 		}//创建一局游戏(根据配置文件或残局)
 	}
 	//进行游戏
-	if (!thisgame->ifend()) {
+	if (thisgame->ifend()) {//游戏结束，回到主页面
+		state = 0;
+		check = true;
+		newgame = true;
+	}
+	else if (thisgame->ifwin()) {//若胜利
+		state = 5;
+		check = true;
+		nextlevel = true;
+	}
+	else {
 		thisgame->gameRun();
 		if (GetAsyncKeyState('P') & 0x8000) {
 			state = 4;
 			check = true;
 		}
-	}
-	else {//游戏结束，回到主页面
-		state = 0;
-		check = true;
-		newgame = true;
 	}
 }
 
@@ -346,16 +357,52 @@ void GameManager::Stop() {
 			}
 		}
 	}
-	else if (GetAsyncKeyState('R')) {
-		check = true;
-		state = 3;
-	}
 }
 
 void GameManager::StopDraw() {
 	settextcolor(WHITE);//绘制“暂停”
 	settextstyle(WindowHeight / 12, 0, _T("Consolas"));
 	outtextxy((WindowWidth-textwidth(L"已暂停")) / 2, WindowHeight / 6, L"已暂停");
+	for (auto i : buttons) {
+		i->draw();
+	}
+}
+
+void GameManager::Win() {
+	if (check) {
+		while (!buttons.empty()) {
+			delete buttons.back();
+			buttons.pop_back();
+		}
+		check = false;
+		Button* next = new Button(WindowWidth / 2, WindowHeight / 2, WindowWidth / 3, WindowHeight / 12);
+		next->setString(L"下一关");
+		next->setid(0);
+		buttons.push_back(next);
+	}
+	if (peekmessage(m, EX_MOUSE)) {
+		if (m->message == WM_LBUTTONDOWN) {
+			int x = m->x; int y = m->y;
+			for (Button* i : buttons) {//检查按钮触发
+				if (i->ifIn(x, y)) {
+					switch (i->uid()) {
+					case 0: { check = true; state = 3; break; }
+					}
+					break;
+				}
+			}
+		}
+	}
+}
+
+void GameManager::WinDraw() {
+	settextcolor(WHITE);//绘制“胜利”
+	settextstyle(WindowHeight / 12, 0, _T("Consolas"));
+	outtextxy((WindowWidth - textwidth(L"你过关！")) / 2, WindowHeight / 6, L"你过关！");
+	std::basic_ostringstream<TCHAR> oss;//建立字符串流
+	oss << _T("当前分数: ") << thisgame->getScore();//输出分数
+	LPCTSTR word = (oss.str()).c_str();
+	outtextxy((WindowWidth - textwidth(word)) / 2, WindowHeight / 3, word);
 	for (auto i : buttons) {
 		i->draw();
 	}

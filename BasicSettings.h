@@ -21,7 +21,7 @@ class BasicSettings
 
 extern const int ballR ;//球半径
 extern const int baffleWidth;//挡板厚度
-extern const int baffleSpeed;//挡板速度
+//extern const int baffleSpeed;//挡板速度
 
 extern const int WindowWidth ;
 extern const int WindowHeight ;

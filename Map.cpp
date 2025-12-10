@@ -12,8 +12,8 @@ Map::Map(int xBlockNum , int yBlockNum ,int level) {//Ä¬ÈÏµÄµØÍ¼£º9*5£¬×©µÄÀàĞÍË
 	for (int x = 0; x < xBlockNum; x++) {
 		this->bricks.push_back(std::vector<Brick>());
 		for (int y = 0; y < yBlockNum; y++) {
-			int type = getRandType(level);
-			this->bricks[x].push_back(Brick(cur_x, cur_y, BrickHeight, BrickWidth, type));//TODO:¸ù¾İlevelµ÷Õû×©¿éÀàĞÍ
+			int type = getRandType(level);//¸ù¾İlevelµ÷Õû×©¿éÀàĞÍ
+			this->bricks[x].push_back(Brick(cur_x, cur_y, BrickHeight, BrickWidth, type));//Éú³É×©¿é
 			cur_y += BlockHeight;
 		}
 		cur_x += BlockWidth;
@@ -50,6 +50,14 @@ void Map::check(Ball* ball,aGame* game) {//ÅĞ¶ÏÇòÓë×©µÄÅö×²²¢´¦Àí
 	for (int i = 0; i < xBlockNum; i++){
 		for (int j = 0; j < yBlockNum; j++  ) {
 			bricks[i][j].check(ball,game);
+		}
+	}
+}
+
+void Map::clear() {//ÇåÍ¼£¬µ÷ÊÔÓÃ¡£
+	for (int x = 0; x < xBlockNum; x++) {
+		for (int y = 0; y < yBlockNum; y++) {
+			if(bricks[x][y].Type()<=1) bricks[x][y].destroy();
 		}
 	}
 }

@@ -10,6 +10,7 @@ public:
 	void mapDraw();
 	bool is_empty();//判断地图上是否还有可摧毁砖块
 	void check(Ball* ball,aGame* game);//检测球与砖块的碰撞并处理
+	void clear();//清图，调试用。
 private:
 	int xBlockNum;//横向砖块数量
 	int yBlockNum;//纵向砖块数量

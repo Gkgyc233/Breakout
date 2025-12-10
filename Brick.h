@@ -11,6 +11,7 @@ public:
 		int Type() { return brickType; };
 		void brickDraw();
 		void check(Ball* ball,aGame* game);//检测与球的碰撞并处理
+		void destroy() { brickType = 3; }//自毁，调试用。
 private:
 	int brickType;//砖块类型:0-普通砖 1-耐久砖 2-坚不可摧砖 3-无砖
 	int x, y;//坐标
