@@ -31,8 +31,8 @@ class GameManager
 	void Lastgame() {};//调用残局的类的函数
 	void LastgameDraw() {};//进入残局设定加载界面绘制
 
-	void Stop() {};//进入暂停界面
-	void StopDraw() {};//进入暂停界面绘制
+	void Stop() ;//进入暂停界面
+	void StopDraw() ;//进入暂停界面绘制
 	void Start() ;//进入游戏状态与游戏进行
 	//游戏界面的绘制直接有aGame的绘制函数完成
 public:

@@ -296,6 +296,10 @@ void GameManager::Start() {
 	//进行游戏
 	if (!thisgame->ifend()) {
 		thisgame->gameRun();
+		if (GetAsyncKeyState('P') & 0x8000) {
+			state = 4;
+			check = true;
+		}
 	}
 	else {//游戏结束，回到主页面
 		state = 0;
@@ -308,4 +312,51 @@ aGame* GameManager::startAGame() {
 	aGame* game = new aGame(set);
 
 	return game;
+}
+
+void GameManager::Stop() {
+	if (check) {
+		while (!buttons.empty()) {
+			delete buttons.back();
+			buttons.pop_back();
+		}
+		check = false;
+		Button* resume = new Button(WindowWidth / 5, WindowHeight / 2, WindowWidth / 5, WindowHeight / 12);//绘制按钮
+		resume->setString(L"恢复");
+		resume->setid(0);
+		buttons.push_back(resume);
+
+		Button* lastgame = new Button(WindowWidth / 5 * 4, WindowHeight / 2, WindowWidth / 5, WindowHeight / 12);
+		lastgame->setString(L"保存残局");
+		lastgame->setid(1);
+		buttons.push_back(lastgame);
+	}
+	if (peekmessage(m, EX_MOUSE)) {
+		if (m->message == WM_LBUTTONDOWN) {
+			int x = m->x; int y = m->y;
+			for (Button* i : buttons) {//检查按钮触发
+				if (i->ifIn(x, y)) {
+					switch (i->uid()) {
+					case 0: { check = true; state = 3; Start(); break; }
+					//case 1: { check = true; state = 1; Settings(); break; }
+					//TODO:添加暂停保存残局功能
+					}
+					break;
+				}
+			}
+		}
+	}
+	else if (GetAsyncKeyState('R')) {
+		check = true;
+		state = 3;
+	}
+}
+
+void GameManager::StopDraw() {
+	settextcolor(WHITE);//绘制“暂停”
+	settextstyle(WindowHeight / 12, 0, _T("Consolas"));
+	outtextxy((WindowWidth-textwidth(L"已暂停")) / 2, WindowHeight / 6, L"已暂停");
+	for (auto i : buttons) {
+		i->draw();
+	}
 }
