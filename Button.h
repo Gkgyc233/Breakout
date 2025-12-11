@@ -9,7 +9,7 @@ private:
 	int xx, yy;//半长宽
 	COLORREF color;//按钮颜色
 	COLORREF txtcolor;//文字颜色
-	std::basic_string<TCHAR> word;;//按钮上的文字
+	std::basic_string<TCHAR> word;//按钮上的文字
 public:
 	Button(int x,int y,int xx,int yy):x(x),y(y),xx(xx),yy(yy) {
 		color = WHITE;      // 默认按钮颜色

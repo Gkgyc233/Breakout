@@ -1,9 +1,14 @@
 #include"GameManager.h"
 GameManager::GameManager() {
 	std::ifstream o(mr + settings + hz, std::ios::in | std::ios::binary);
-	if (o.is_open()) { o.read((char*)&set, sizeof(set)); o.close(); }
-	else { std::ofstream o(mr + settings + hz, std::ios::out | std::ios::binary);
-	o.write((char*)&set, sizeof(set)); o.close();
+	if (o.is_open()) {
+		o.read((char*)&set, sizeof(set));
+		o.close();
+	}
+	else {
+		std::ofstream o(mr + settings + hz, std::ios::out | std::ios::binary);
+		o.write((char*)&set, sizeof(set)); 
+		o.close();
 	}
 }
 
@@ -13,8 +18,10 @@ void GameManager::draw() {
 	case 0:Menudraw(); break;
 	case 1:SetDraw(); break;
 	case 2:LastgameDraw(); break;
-	case 3:thisgame->gameGraw(); break;
+	case 3:thisgame->gameDraw(); break;
 	case 4:StopDraw(); break;
+	case 5:WinDraw(); break;
+	case 6:LoseDraw(); break;
 	}
 };
 void GameManager::run() {
@@ -22,8 +29,10 @@ void GameManager::run() {
 	case 0:MenuCheck(); break;
 	case 1:Settings(); break;
 	case 2:Lastgame(); break;
-	case 3:thisgame->gameRun(); break;
+	case 3:Start(); break;
 	case 4:Stop(); break;
+	case 5:Win(); break;
+	case 6:Lose(); break;
 	}
 	
 };
@@ -278,3 +287,167 @@ void GameManager::create(){
 	check = true;
 }
 
+void GameManager::Start() {
+	if (check) {
+		check = false;
+		if (nextlevel) {
+			nextlevel = false;
+			thisgame->nextLevel();
+		}
+		if (newgame) {
+			newgame = false;
+			thisgame = startAGame();
+			
+			//TODO：根据残局创建游戏
+		}//创建一局游戏(根据配置文件或残局)
+	}
+	//进行游戏
+	if (thisgame->ifend()) {//游戏结束，移动到失败界面
+		state = 6;
+		check = true;
+		newgame = true;
+	}
+	else if (thisgame->ifwin()) {//若胜利
+		state = 5;
+		check = true;
+		nextlevel = true;
+	}
+	else {
+		thisgame->gameRun();
+		if (GetAsyncKeyState('P') & 0x8000) {
+			state = 4;
+			check = true;
+		}
+	}
+}
+
+aGame* GameManager::startAGame() {
+	aGame* game = new aGame(set);
+
+	return game;
+}
+
+void GameManager::Stop() {
+	if (check) {
+		while (!buttons.empty()) {
+			delete buttons.back();
+			buttons.pop_back();
+		}
+		check = false;
+		Button* resume = new Button(WindowWidth / 5, WindowHeight / 2, WindowWidth / 5, WindowHeight / 12);//绘制按钮
+		resume->setString(L"恢复");
+		resume->setid(0);
+		buttons.push_back(resume);
+
+		Button* lastgame = new Button(WindowWidth / 5 * 4, WindowHeight / 2, WindowWidth / 5, WindowHeight / 12);
+		lastgame->setString(L"保存残局");
+		lastgame->setid(1);
+		buttons.push_back(lastgame);
+	}
+	if (peekmessage(m, EX_MOUSE)) {
+		if (m->message == WM_LBUTTONDOWN) {
+			int x = m->x; int y = m->y;
+			for (Button* i : buttons) {//检查按钮触发
+				if (i->ifIn(x, y)) {
+					switch (i->uid()) {
+					case 0: { check = true; state = 3; Start(); break; }
+					//case 1: { check = true; state = 1; Settings(); break; }
+					//TODO:添加暂停保存残局功能
+					}
+					break;
+				}
+			}
+		}
+	}
+}
+
+void GameManager::StopDraw() {
+	settextcolor(WHITE);//绘制“暂停”
+	settextstyle(WindowHeight / 12, 0, _T("Consolas"));
+	outtextxy((WindowWidth-textwidth(L"已暂停")) / 2, WindowHeight / 6, L"已暂停");
+	for (auto i : buttons) {
+		i->draw();
+	}
+}
+
+void GameManager::Win() {
+	if (check) {
+		while (!buttons.empty()) {
+			delete buttons.back();
+			buttons.pop_back();
+		}
+		check = false;
+		Button* next = new Button(WindowWidth / 2, WindowHeight / 2, WindowWidth / 3, WindowHeight / 12);
+		next->setString(L"下一关");
+		next->setid(0);
+		buttons.push_back(next);
+	}
+	if (peekmessage(m, EX_MOUSE)) {
+		if (m->message == WM_LBUTTONDOWN) {
+			int x = m->x; int y = m->y;
+			for (Button* i : buttons) {//检查按钮触发
+				if (i->ifIn(x, y)) {
+					switch (i->uid()) {
+					case 0: { check = true; state = 3; break; }
+					}
+					break;
+				}
+			}
+		}
+	}
+}
+
+void GameManager::WinDraw() {
+	settextcolor(WHITE);//绘制“胜利”
+	settextstyle(WindowHeight / 12, 0, _T("Consolas"));
+	outtextxy((WindowWidth - textwidth(L"你过关")) / 2, WindowHeight / 6, L"你过关！");
+	std::basic_ostringstream<TCHAR> oss;//建立字符串流
+	oss << _T("当前分数: ") << thisgame->getScore();//输出分数
+	std::basic_string<TCHAR> str = oss.str();
+	LPCTSTR word = (str).c_str();
+	outtextxy((WindowWidth - textwidth(word)) / 2, WindowHeight / 3, word);
+	for (auto i : buttons) {
+		i->draw();
+	}
+}
+
+void GameManager::Lose() {
+	if (check) {
+		while (!buttons.empty()) {
+			delete buttons.back();
+			buttons.pop_back();
+		}
+		check = false;
+		Button* menu = new Button(WindowWidth / 2, WindowHeight / 2, WindowWidth / 3, WindowHeight / 12);
+		menu->setString(L"返回主菜单");
+		menu->setid(0);
+		buttons.push_back(menu);
+	}
+	if (peekmessage(m, EX_MOUSE)) {
+		if (m->message == WM_LBUTTONDOWN) {
+			int x = m->x; int y = m->y;
+			for (Button* i : buttons) {//检查按钮触发
+				if (i->ifIn(x, y)) {
+					switch (i->uid()) {
+					case 0: { check = true; state = 0; break; }
+					}
+					break;
+				}
+			}
+		}
+	}
+}
+
+void GameManager::LoseDraw() {
+	settextcolor(WHITE);//绘制“GameOver”
+	settextstyle(WindowHeight / 12, 0, _T("Consolas"));
+	outtextxy((WindowWidth - textwidth(L"该罚")) / 2, WindowHeight / 6, L"该罚！");
+	std::basic_ostringstream<TCHAR> oss;//建立字符串流
+	oss << _T("分数: ") << thisgame->getScore();//输出分数
+	std::basic_string<TCHAR> str = oss.str();
+	LPCTSTR word = (str).c_str();
+	outtextxy((WindowWidth - textwidth(word)) / 2, WindowHeight / 3, word);
+	for (auto i : buttons) {
+		i->draw();
+	}
+}

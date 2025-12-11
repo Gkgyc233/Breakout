@@ -6,7 +6,7 @@ class GameManager
 {private:
 	ExMessage* m=new ExMessage;
 
-	int state = 0;//状态参数，0为主菜单，1为自定义配置界面，2为残局设定加载界面，3为游戏内界面，4为暂停保存残局界面
+	int state = 0;//状态参数，0为主菜单，1为自定义配置界面，2为残局设定加载界面，3为游戏内界面，4为暂停保存残局界面，5为胜利界面，6为失败界面
 	bool ifrunning = true;//游戏运行中
 	bool check = true;//是否发生场景转换
 	std::vector<Button*> buttons;
@@ -16,7 +16,11 @@ class GameManager
 	gameSettings set;
 	std::wstring lastgame;//残局文件名
 
-	aGame* startAGame() {};//依据配置或残局创建新一局游戏，返回创建的游戏类的指针
+
+
+	bool newgame = true;//是创建一局游戏还是继续游戏
+	bool nextlevel = false;//是否进入下一关
+	aGame* startAGame() ;//依据配置或残局创建新一局游戏，返回创建的游戏类的指针
 	aGame* thisgame;//指向当前游戏的指针
 
 	void Menudraw();//主菜单绘制
@@ -28,9 +32,17 @@ class GameManager
 
 	void Lastgame() {};//调用残局的类的函数
 	void LastgameDraw() {};//进入残局设定加载界面绘制
-	void Stop() {};//进入暂停界面
-	void StopDraw() {};//进入暂停界面绘制
-	void Start() {};//开始一局游戏//创建并初始化游戏//改变GameManager的状态
+
+	void Stop() ;//进入暂停界面
+	void StopDraw() ;//进入暂停界面绘制
+	void Start() ;//进入游戏状态与游戏进行
+	//游戏界面的绘制直接由aGame的绘制函数完成
+
+	void Win();//胜利界面
+	void WinDraw();//胜利界面绘制
+	void Lose();//失败界面
+	void LoseDraw();//失败界面绘制
+
 public:
 	GameManager();
 	void draw();//整体的绘制函数//根据不同状态调用不同的绘制函数

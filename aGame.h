@@ -2,35 +2,40 @@
 #include "Ball.h"
 #include "Baffle.h"
 #include "Brick.h"
+#include "Map.h"
 class aGame
 {
 public:
-	aGame(std::string settings, int gamelevel,
-		std::vector<Brick>& bricks,
-		std::string lastGame
-		);//创建一局游戏：配置文件名，关卡等级；残局文件名
-	aGame(std::string settings, int gamelevel);//创建一局游戏：配置文件名，关卡等级//读取配置文件，初始化游戏
-	void gameGraw() ;//绘制一局游戏内的物品
+	aGame(gameSettings set) ;
+	void gameDraw() ;//绘制一局游戏内的物品
 	void readLastGame(std::string lastgame);//读取并加载残局
 	void gameRun() ;//一局游戏运行
+	void gameInit();//通过配置创建一局游戏
+	bool ifend() { return ifEnd; }
+	bool ifwin() { return ifWin; }
+	void displayInfo();//绘制游戏信息（血量、关卡等）
+	void earnScore() { scores++; }//得分
+	int  getScore() { return scores; }//获取分数
+	void nextLevel();//进入下一关
+	gameSettings settings;//三样默认或自定义设置
 private:
+	ExMessage* msg = new ExMessage;
 	int scores;//分数
 	int blood;//血量
-
-	//配置文件包含的信息
-	int gamelevel;//游戏关卡等级
-	int base_v;
-	int seed;
-
-	Ball ball;//小球
-	Baffle baffle;//挡板
-
+	bool ifEnd = false;
+	bool ifWin = false;//是否在通关状态
+	int level;//关卡
+	int xBlockNum = 9;//横向格子数（3.2.1）//TODO:根据残局更改横纵格子数
+	int yBlockNum = 10;//纵向格子数（注：因为要放挡板和小球，只有上面一半的格子才会被砖占着）
+	Ball* ball;//小球
+	Baffle* baffle;//挡板
 	//3.1的配置功能
-	std::string settings;//三样默认或自定义设置 的文件名
+	//std::wstring setName;//配置文件的名字
+	//NOTE:从文件读取设置的功能已经在BasicSettings和GameManager中实现，不需要在这里重复实现
+
 
 	//3.2的残局功能
-	int width, hight;//一局游戏的地图宽高
-	std::vector<Brick> bricks;//砖块与占位符的平铺状态
+	Map* map;//砖块地图，可以用于加载残局
 	//初始关卡gamelevel的信息覆盖3.1的配置
 };
 

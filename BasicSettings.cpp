@@ -2,8 +2,8 @@
 
 
 const int ballR = 10;//Çò°ë¾¶
-const int baffleWidth = 50;//µ²°åºñ¶È
-
+const int baffleWidth = 40;//µ²°åºñ¶È
+//const int baffleSpeed = 8;//µ²°åËÙ¶È
 
 const int WindowWidth = 1080;
 const int WindowHeight = 640;
@@ -13,8 +13,59 @@ enum brickType { Durable, Normal, Indestructible, No };//#,@,* ÈıÖÖ×©ÓëÃ»ÓĞ×©µÄÕ
 const std::wstring hz = L".config";
 const std::wstring mr = L".\\config\\";
 
+const std::wstring lastgame_prefix = L".\\endgames\\";
+const std::wstring lastgame_postfix = L".end";
 
+const float g = 0.2;//ÖØÁ¦¼ÓËÙ¶È
 
+CollisionInfo* collide(int ball_x, int ball_y, int r, int rect_x, int rect_y, int rect_width, int rect_height) {//ÅĞ¶ÏÇòÓë¾ØĞÎµÄÅö×²
+	CollisionInfo* info = new CollisionInfo;
+	if (ball_x <= rect_x - r || ball_x >= rect_x+rect_width + r || ball_y <= rect_y - r || ball_y >= rect_y+rect_height + r) return info;//³õ²½¼ì²â
+	int clostestX = std::clamp(ball_x, rect_x, rect_x + rect_width);//ÕÒµ½ÇòĞÄµ½¾ØĞÎ×î½üµÄµã
+	int clostestY = std::clamp(ball_y, rect_y, rect_y + rect_height);
+	int dist_squared = (ball_x - clostestX) * (ball_x - clostestX) + (ball_y - clostestY) * (ball_y - clostestY);//¼ÆËã¾àÀëµÄÆ½·½
+	info->collided = dist_squared <= r * r;//ÅĞ¶ÏÊÇ·ñÅö×²
+	if (info->collided) {
+		info->collisionX = clostestX;//¼ÇÂ¼Åö×²µãx×ø±ê
+		info->collisionY = clostestY;//¼ÇÂ¼Åö×²µãy×ø±ê
+		if (clostestX == ball_x && clostestY == ball_y) info->in = true;//ÇòĞÄÔÚ¾ØĞÎÄÚ
+	}
+	return info;
+}
+
+std::vector<std::vector<int>>* getRandType(int level,int seed,int x,int y) {
+	std::vector<std::vector<int>>* type = new std::vector<std::vector<int>>;
+	int sd;
+	if (seed == -1) {
+		sd = static_cast<int>(std::time(nullptr));
+	}
+	else {
+		sd = seed+level-1;
+	}
+	//std::random_device rd;//»ñÈ¡Ëæ»úÊıÖÖ×Ó
+	std::mt19937 gen;
+	gen.seed(sd);//Ê¹ÓÃÃ·É­Ğı×ªËã·¨Éú³ÉËæ»úÊı
+	std::uniform_int_distribution<> dis(1, 1000);//Éú³É1µ½1000µÄ¾ùÔÈ·Ö²¼Ëæ»úÕûÊı
+	int bar0 = 600 - level * 20; // ÆÕÍ¨×©¿é¸ÅÂÊ
+	int bar1 = 900 - level * 10; // ÄÍ¾Ã×©¿é¸ÅÂÊ
+	for (int i = 0; i < x; i++) {
+		(*type).push_back(std::vector<int>());
+		for (int j = 0; j < y; j++) {
+			int randNum = dis(gen);//»ñÈ¡Ëæ»úÊı
+			if (randNum <= bar0) {
+				(*type)[i].push_back(0); // ÆÕÍ¨×©
+			}
+			else if (randNum <= bar1) {
+				(*type)[i].push_back(1); // ÄÍ¾Ã×©
+			}
+			else {
+				if (level > 2) (*type)[i].push_back(2); // ¼á²»¿É´İ×©
+				else (*type)[i].push_back(0);
+			}
+		}
+	}
+	return type;
+}
 /*
 ÎÒÃÇ¹æ¶¨£º
 gameLevelÖ»Ó°ÏìballµÄËÙ¶ÈºÍbaffleµÄ¿í¶È£»

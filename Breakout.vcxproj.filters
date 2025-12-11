@@ -39,6 +39,9 @@
     <ClCompile Include="Button.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h">
@@ -62,5 +65,13 @@
     <ClInclude Include="Button.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>
