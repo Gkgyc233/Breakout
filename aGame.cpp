@@ -1,18 +1,13 @@
 #include "aGame.h"
 
 
-aGame::aGame(std::wstring lastgame):baffle(),ball(),map(){//从残局创建
-	this->baffle = new Baffle();
-	this->ball = new Ball();
-	this->map = new Map(); 
-	std::ifstream in(lastgame_prefix + lastgame + lastgame_postfix, std::ios::in | std::ios::binary);
-	in.read((char*)&settings, sizeof(settings));
-	this->baffle->deserialize(in);
-	this->ball->deserialize(in,baffle);
-	this->map->deserialize(in);
-	in.read((char*)&scores, sizeof(scores));
-	in.read((char*)&blood, sizeof(blood));
-	this->level = settings.k;
+aGame::aGame(std::wstring lastgame):baffle(),ball(),map(),ifEnd(false),ifWin(false){//是否在通关状态{//从残局创建
+	std::wstring fullname = lastgame_prefix + lastgame ;
+	std::ifstream in(fullname, std::ios::in | std::ios::binary);
+	if (in.is_open()) {
+		this->deserialize(in);
+	}
+	else { std::cout << "无法读取残局文件";std::wcout << (fullname); }
 	in.close();
 };
 
@@ -48,12 +43,10 @@ void aGame::gameDraw(std::wstring setname) {
 	this->displayInfo(setname);
 }
 
-void aGame::gameInit() {
-	
-}
 
 
-aGame::aGame(gameSettings set) {
+
+aGame::aGame(gameSettings set):ifWin(false), ifEnd(false) {
 	this->settings = set;
 	this->baffle = new Baffle();
 	this->ball = new Ball();

@@ -588,15 +588,8 @@ bool GameManager::createLastgame(bool ready) {
 			MessageBox(GetHWnd(), L"无法创建残局文件", L"错误", MB_OK | MB_ICONERROR);
 			return false;
 		}
-		o.write((char*)&(thisgame->settings), sizeof(thisgame->settings));
-		thisgame->baffle->serialize(o);
-		thisgame->ball->serialize(o);
-		thisgame->map->serialize(o);
-		int score = thisgame->getScore();
-		o.write((char*)&score, sizeof(score));
-		int blood = thisgame->getblood();
-		o.write((char*)&blood, sizeof(blood));
-
+		
+		thisgame->serialize(o);
 		o.close();
 
 		lastgamename = name;

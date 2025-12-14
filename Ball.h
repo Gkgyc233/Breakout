@@ -27,28 +27,28 @@ public:
 
     void serialize(std::ofstream& out) const {
         // 保存基本数据成员
-        out.write((char*)&x, sizeof(x));
-        out.write((char*)&y, sizeof(y));
-        out.write((char*)&vx, sizeof(vx));
-        out.write((char*)&vy, sizeof(vy));
-        out.write((char*)&base_v, sizeof(base_v));
-        out.write((char*)&real_v, sizeof(real_v));
-        out.write((char*)&limit_v, sizeof(limit_v));
-        out.write((char*)&theta, sizeof(theta));
-        out.write((char*)&frozen, sizeof(frozen));
+		out.write(reinterpret_cast<const char*>(&x), sizeof(x));
+		out.write(reinterpret_cast<const char*>(&y), sizeof(y));
+		out.write(reinterpret_cast<const char*>(&vx), sizeof(vx));
+		out.write(reinterpret_cast<const char*>(&vy), sizeof(vy));
+		out.write(reinterpret_cast<const char*>(&base_v), sizeof(base_v));
+		out.write(reinterpret_cast<const char*>(&real_v), sizeof(real_v));
+		out.write(reinterpret_cast<const char*>(&limit_v), sizeof(limit_v));
+		out.write(reinterpret_cast<const char*>(&theta), sizeof(theta));
+		out.write(reinterpret_cast<const char*>(&frozen), sizeof(frozen));
 
     }
 
-    void deserialize(std::ifstream& in,Baffle* b) {
-        in.read((char*)&x, sizeof(x));
-        in.read((char*)&y, sizeof(y));
-        in.read((char*)&vx, sizeof(vx));
-        in.read((char*)&vy, sizeof(vy));
-        in.read((char*)&base_v, sizeof(base_v));
-        in.read((char*)&real_v, sizeof(real_v));
-        in.read((char*)&limit_v, sizeof(limit_v));
-        in.read((char*)&theta, sizeof(theta));
-        in.read((char*)&frozen, sizeof(frozen));
+    bool deserialize(std::ifstream& in,Baffle* b) {
+		if (!in.read(reinterpret_cast<char*>(&x), sizeof(x))) return false;
+		if (!in.read(reinterpret_cast<char*>(&y), sizeof(y))) return false;
+		if (!in.read(reinterpret_cast<char*>(&vx), sizeof(vx))) return false;
+		if (!in.read(reinterpret_cast<char*>(&vy), sizeof(vy))) return false;
+		if (!in.read(reinterpret_cast<char*>(&base_v), sizeof(base_v))) return false;
+		if (!in.read(reinterpret_cast<char*>(&real_v), sizeof(real_v))) return false;
+		if (!in.read(reinterpret_cast<char*>(&limit_v), sizeof(limit_v))) return false;
+		if (!in.read(reinterpret_cast<char*>(&theta), sizeof(theta))) return false;
+		if (!in.read(reinterpret_cast<char*>(&frozen), sizeof(frozen))) return false;
         linkBaffle(b);
         // 注意：baffle指针在反序列化后需要重新设置
         // 这个调用linkBaffle完成

@@ -27,11 +27,12 @@ public:
 		out.write(reinterpret_cast<const char*>(&length), sizeof(length));
 		out.write(reinterpret_cast<const char*>(&speed), sizeof(speed));
 	}
-	void deserialize(std::ifstream& in) {//反序列化函数
-		in.read(reinterpret_cast<char*>(&x), sizeof(x));
-		in.read(reinterpret_cast<char*>(&y), sizeof(y));
-		in.read(reinterpret_cast<char*>(&length), sizeof(length));
-		in.read(reinterpret_cast<char*>(&speed), sizeof(speed));
+	bool deserialize(std::ifstream& in) {//反序列化函数
+		if(!in.read(reinterpret_cast<char*>(&x), sizeof(x)))return false;
+		if(!in.read(reinterpret_cast<char*>(&y), sizeof(y)))return false;
+		if(!in.read(reinterpret_cast<char*>(&length), sizeof(length)))return false;
+		if(!in.read(reinterpret_cast<char*>(&speed), sizeof(speed)))return false;
+		return true;
 	}
 
 private:

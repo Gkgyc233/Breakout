@@ -2,7 +2,7 @@
 #include "Brick.h"
 #include "Ball.h"
 #include <vector>
-Map::Map(int seed,int xBlockNum , int yBlockNum ,int level) {//默认的地图：9*5，砖的类型随gamelevel变化。
+Map::Map(int seed,int xBlockNum , int yBlockNum ,int level) :ifempty(false) {//默认的地图：9*5，砖的类型随gamelevel变化。
 	this->xBlockNum = xBlockNum;
 	this->yBlockNum = yBlockNum;
 	this->BlockWidth = 700 / xBlockNum;
@@ -25,15 +25,21 @@ Map::Map(int seed,int xBlockNum , int yBlockNum ,int level) {//默认的地图：9*5，
 }
 
 bool Map::is_empty() {//检测是否所有可以被打掉的砖都被打掉了
+	ifempty = checkEmpty();
+	return ifempty;
+}
+
+bool Map::checkEmpty() {
 	for (int x = 0; x < xBlockNum; x++) {
 		for (int y = 0; y < yBlockNum; y++) {
-			if(bricks[x][y].Type()<=1){//若为普通砖或耐久砖
+			if (bricks[x][y].Type() <= 1) {//若为普通砖或耐久砖
 				return false;
 			}
 		}
 	}
 	return true;
 }
+
 
 void Map::mapDraw() {
 	setfillcolor(WHITE);

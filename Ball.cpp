@@ -27,13 +27,10 @@ void Ball::ballMove() {
 		this->x = baffle->getMid();
 		this->y = baffle->gety() - ballR;
 	}
-	//if (real_v > limit_v) real_v = limit_v;
 	vx =   real_v * 1.0 * cos(theta*pi/180.0);//计算速度分量
 	vy = - real_v * 1.0 * sin(theta*pi/180.0);
 	x += vx;//更新位置
 	y += vy;
-	//vy += g;//施加重力加速度
-	//real_v = sqrt(vx * vx + vy * vy);//更新实际速度
 	theta = atan2(-vy, vx)/pi*180;//更新方向角度
 	return;
 }
@@ -42,7 +39,6 @@ void Ball::collideWithBaffle() {
 	CollisionInfo* info = collide(x, y, ballR, baffle->getx(), baffle->gety(), baffle->getlength(), baffleWidth);//判断球与版是否碰撞
 	if (info->collided && (info->collisionY - baffle->gety())<=20) {//若碰撞到挡板的水平面
 		float dx = (info->collisionX - baffle->getMid())*1.0/(baffle->getlength());//计算碰撞点与挡板中点的归一化水平距离
-		//bounce('x');
 		theta = 90 - dx * 50.0;//根据碰撞点调整反弹角度，最大偏转50度
 		y = baffle->gety() - ballR;//调整位置，防止卡在挡板内
 		//TODO:根据碰撞点调整反弹角度

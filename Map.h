@@ -9,7 +9,7 @@ class Brick;//前向声明
 class Map
 {
 public:
-	Map() {};
+	Map():ifempty(false) {};
 	Map(int seed,int xBlockNum ,int yBlockNum , int level);
 	void mapDraw();
 	bool is_empty();//判断地图上是否还有可摧毁砖块
@@ -19,12 +19,12 @@ public:
     // 序列化：将Map对象转换为字节流
     void serialize(std::ofstream& out) const {
         // 保存基本参数
-        out.write((char*)&xBlockNum, sizeof(xBlockNum));
-        out.write((char*)&yBlockNum, sizeof(yBlockNum));
-        out.write((char*)&BlockWidth, sizeof(BlockWidth));
-        out.write((char*)&BlockHeight, sizeof(BlockHeight));
-        out.write((char*)&BrickHeight, sizeof(BrickHeight));
-        out.write((char*)&BrickWidth, sizeof(BrickWidth));
+        out.write(reinterpret_cast<const char*>(&xBlockNum), sizeof(xBlockNum));
+        out.write(reinterpret_cast<const char*>(&yBlockNum), sizeof(yBlockNum));
+        out.write(reinterpret_cast<const char*>(&BlockWidth), sizeof(BlockWidth));
+        out.write(reinterpret_cast<const char*>(&BlockHeight), sizeof(BlockHeight));
+        out.write(reinterpret_cast<const char*>(&BrickHeight), sizeof(BrickHeight));
+        out.write(reinterpret_cast<const char*>(&BrickWidth), sizeof(BrickWidth));
 
 
         for (const auto& row : bricks) {
@@ -34,14 +34,14 @@ public:
         }
     }
     // 反序列化：从字节流恢复Map对象
-    void deserialize(std::ifstream& in) {
+    bool deserialize(std::ifstream& in) {
         // 读取基本参数
-        in.read((char*)&xBlockNum, sizeof(xBlockNum));
-        in.read((char*)&yBlockNum, sizeof(yBlockNum));
-        in.read((char*)&BlockWidth, sizeof(BlockWidth));
-        in.read((char*)&BlockHeight, sizeof(BlockHeight));
-        in.read((char*)&BrickHeight, sizeof(BrickHeight));
-        in.read((char*)&BrickWidth, sizeof(BrickWidth));
+        if (!in.read(reinterpret_cast<char*>(&xBlockNum), sizeof(xBlockNum))) return false;
+        if (!in.read(reinterpret_cast<char*>(&yBlockNum), sizeof(yBlockNum))) return false;
+        if (!in.read(reinterpret_cast<char*>(&BlockWidth), sizeof(BlockWidth))) return false;
+        if (!in.read(reinterpret_cast<char*>(&BlockHeight), sizeof(BlockHeight))) return false;
+        if (!in.read(reinterpret_cast<char*>(&BrickHeight), sizeof(BrickHeight))) return false;
+        if (!in.read(reinterpret_cast<char*>(&BrickWidth), sizeof(BrickWidth))) return false;
 
         bricks.resize(xBlockNum);
         // 读取每一行
@@ -59,10 +59,12 @@ public:
 private:
 	int xBlockNum;//横向砖块数量
 	int yBlockNum;//纵向砖块数量
+    bool ifempty = false;
 	std::vector<std::vector<Brick>> bricks;//砖块二维数组
 	int BlockWidth;
 	int BlockHeight;
 	int BrickHeight;
 	int BrickWidth;
+    bool checkEmpty();
 };
 

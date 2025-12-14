@@ -16,20 +16,20 @@ public:
 
         // 序列化：将Brick对象转换为字节流
         void serialize(std::ofstream& out) const {
-            out.write((char*)&brickType, sizeof(brickType));
-            out.write((char*)&x, sizeof(x));
-            out.write((char*)&y, sizeof(y));
-            out.write((char*)&h, sizeof(h));
-            out.write((char*)&w, sizeof(w));
+            out.write(reinterpret_cast<const char*>(&brickType), sizeof(brickType));
+            out.write(reinterpret_cast<const char*>(&x), sizeof(x));
+            out.write(reinterpret_cast<const char*>(&y), sizeof(y));
+            out.write(reinterpret_cast<const char*>(&h), sizeof(h));
+            out.write(reinterpret_cast<const char*>(&w), sizeof(w));
         }
 
         // 反序列化：从字节流恢复Brick对象
-        void deserialize(std::ifstream& in) {
-            in.read((char*)&brickType, sizeof(brickType));
-            in.read((char*)&x, sizeof(x));
-            in.read((char*)&y, sizeof(y));
-            in.read((char*)&h, sizeof(h));
-            in.read((char*)&w, sizeof(w));
+        bool deserialize(std::ifstream& in) {
+            if (!in.read(reinterpret_cast<char*>(&brickType), sizeof(brickType))) return false;
+            if (!in.read(reinterpret_cast<char*>(&x), sizeof(x))) return false;
+            if (!in.read(reinterpret_cast<char*>(&y), sizeof(y))) return false;
+            if (!in.read(reinterpret_cast<char*>(&h), sizeof(h))) return false;
+            if (!in.read(reinterpret_cast<char*>(&w), sizeof(w))) return false;
         }
 
 
