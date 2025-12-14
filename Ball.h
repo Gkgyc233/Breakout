@@ -6,6 +6,7 @@ class aGame;//前向声明
 class Ball
 {
 public:
+	Ball() {};
 	void setBall(int gameLevel, int base_v,int t=90);//输入关卡等级,基础速度，方向
 	void linkBaffle(Baffle* b);//关联挡板
 	void ballDraw();//球绘制
@@ -23,6 +24,37 @@ public:
 	void displayInfo();//显示球的信息，调试用
 	bool isFrozen() { return frozen; };
 	void defroze() { frozen = false; };
+
+    void serialize(std::ofstream& out) const {
+        // 保存基本数据成员
+        out.write((char*)&x, sizeof(x));
+        out.write((char*)&y, sizeof(y));
+        out.write((char*)&vx, sizeof(vx));
+        out.write((char*)&vy, sizeof(vy));
+        out.write((char*)&base_v, sizeof(base_v));
+        out.write((char*)&real_v, sizeof(real_v));
+        out.write((char*)&limit_v, sizeof(limit_v));
+        out.write((char*)&theta, sizeof(theta));
+        out.write((char*)&frozen, sizeof(frozen));
+
+    }
+
+    void deserialize(std::ifstream& in,Baffle* b) {
+        in.read((char*)&x, sizeof(x));
+        in.read((char*)&y, sizeof(y));
+        in.read((char*)&vx, sizeof(vx));
+        in.read((char*)&vy, sizeof(vy));
+        in.read((char*)&base_v, sizeof(base_v));
+        in.read((char*)&real_v, sizeof(real_v));
+        in.read((char*)&limit_v, sizeof(limit_v));
+        in.read((char*)&theta, sizeof(theta));
+        in.read((char*)&frozen, sizeof(frozen));
+        linkBaffle(b);
+        // 注意：baffle指针在反序列化后需要重新设置
+        // 这个调用linkBaffle完成
+    }
+
+
 private:
 	float x, y;//坐标
 	float vx, vy;

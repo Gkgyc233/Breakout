@@ -1,6 +1,20 @@
 #include "aGame.h"
 
-void aGame::readLastGame(std::string lastgame) {};
+
+aGame::aGame(std::wstring lastgame):baffle(),ball(),map(){//从残局创建
+	this->baffle = new Baffle();
+	this->ball = new Ball();
+	this->map = new Map(); 
+	std::ifstream in(lastgame_prefix + lastgame + lastgame_postfix, std::ios::in | std::ios::binary);
+	in.read((char*)&settings, sizeof(settings));
+	this->baffle->deserialize(in);
+	this->ball->deserialize(in,baffle);
+	this->map->deserialize(in);
+	in.read((char*)&scores, sizeof(scores));
+	in.read((char*)&blood, sizeof(blood));
+	this->level = settings.k;
+	in.close();
+};
 
 void aGame::gameRun() {
 	ball->ballMove();//处理球的移动
@@ -27,11 +41,11 @@ void aGame::gameRun() {
 	}
 }
 
-void aGame::gameDraw() {
+void aGame::gameDraw(std::wstring setname) {
 	baffle->baffleDraw();
 	ball->ballDraw();
 	map->mapDraw();
-	this->displayInfo();
+	this->displayInfo(setname);
 }
 
 void aGame::gameInit() {
@@ -52,7 +66,7 @@ aGame::aGame(gameSettings set) {
 	baffle->adjust(level);
 }
 
-void aGame::displayInfo() {//显示血量、分数,etc.
+void aGame::displayInfo(std::wstring setname) {//显示血量、分数,etc.
 	settextcolor(WHITE);
 	std::basic_ostringstream<TCHAR> oss;//建立字符串流
 	oss << _T("score: ") << scores;
@@ -64,6 +78,11 @@ void aGame::displayInfo() {//显示血量、分数,etc.
 	oss << _T("level: ") << level;
 	outtextxy(800, 160, (oss.str()).c_str());
 	oss.str(_T(""));
+	oss << _T("config:") ;
+	outtextxy(800, 220, (oss.str()).c_str());
+	oss.str(_T(""));
+	oss << setname;
+	outtextxy(800, 280, (oss.str()).c_str());
 	return;
 }
 

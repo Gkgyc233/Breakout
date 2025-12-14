@@ -66,6 +66,9 @@ std::vector<std::vector<int>>* getRandType(int level,int seed,int x,int y) {
 	}
 	return type;
 }
+
+
+
 /*
 我们规定：
 gameLevel只影响ball的速度和baffle的宽度；

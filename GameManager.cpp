@@ -18,7 +18,7 @@ void GameManager::draw() {
 	case 0:Menudraw(); break;
 	case 1:SetDraw(); break;
 	case 2:LastgameDraw(); break;
-	case 3:thisgame->gameDraw(); break;
+	case 3:thisgame->gameDraw(settings); break;
 	case 4:StopDraw(); break;
 	case 5:WinDraw(); break;
 	case 6:LoseDraw(); break;
@@ -56,7 +56,9 @@ void GameManager::MenuCheck() {
 		buttons.push_back(setting);
 
 		Button* lastgame = new Button(WindowWidth / 5*4, WindowHeight / 2, WindowWidth / 5, WindowHeight / 12);
-		lastgame->setString(_T("无残局"));
+		if(ifLastgame) { lastgame->setString(lastgamename); }
+		else { lastgame->setString(_T("无残局")); }
+		
 		lastgame->setid(2);
 		buttons.push_back(lastgame);
 
@@ -89,6 +91,11 @@ void GameManager::Menudraw() {
 	}
 }
 void GameManager::SetDraw() {
+	for (auto i : buttons) {
+		i->draw();
+	}
+}
+void GameManager::LastgameDraw() {
 	for (auto i : buttons) {
 		i->draw();
 	}
@@ -296,9 +303,10 @@ void GameManager::Start() {
 		}
 		if (newgame) {
 			newgame = false;
-			thisgame = startAGame();
+			if (ifLastgame) { thisgame = startAGame(lastgamename); }
+			else { thisgame = startAGame(); }
 			
-			//TODO：根据残局创建游戏
+
 		}//创建一局游戏(根据配置文件或残局)
 	}
 	//进行游戏
@@ -323,6 +331,11 @@ void GameManager::Start() {
 
 aGame* GameManager::startAGame() {
 	aGame* game = new aGame(set);
+
+	return game;
+}
+aGame* GameManager::startAGame(std::wstring) {
+	aGame* game = new aGame(lastgamename);
 
 	return game;
 }
@@ -351,8 +364,7 @@ void GameManager::Stop() {
 				if (i->ifIn(x, y)) {
 					switch (i->uid()) {
 					case 0: { check = true; state = 3; Start(); break; }
-					//case 1: { check = true; state = 1; Settings(); break; }
-					//TODO:添加暂停保存残局功能
+					case 1: {  if (createLastgame(true)) { check = true; state = 3; Start(); }; break; }//保存残局信息后继续游戏
 					}
 					break;
 				}
@@ -450,4 +462,145 @@ void GameManager::LoseDraw() {
 	for (auto i : buttons) {
 		i->draw();
 	}
+}
+
+
+
+void GameManager::Lastgame() {
+	if (check) {
+		while (!buttons.empty()) {
+			delete buttons.back();
+			buttons.pop_back();
+		}
+		check = false;
+		//初始化按钮
+		Button* menu = new Button(WindowWidth / 10, WindowHeight / 10, WindowWidth / 30, WindowHeight / 30);
+		menu->setString(_T("返回"));
+		menu->setid(0);
+		buttons.push_back(menu);
+
+		Button* create = new Button(WindowWidth / 10 * 9, WindowHeight / 10 * 9, WindowWidth / 25, WindowHeight / 30);
+		create->setString(_T("创建新残局"));
+		create->setid(10);
+		buttons.push_back(create);
+
+		Button* nocreate = new Button(WindowWidth / 10 * 9, WindowHeight / 10 * 7, WindowWidth / 25, WindowHeight / 30);
+		nocreate->setString(_T("不加载残局"));
+		nocreate->setid(1);
+		buttons.push_back(nocreate);
+
+
+		allSettingsName.clear();
+		int i = 0;
+		for (const auto& entry : std::filesystem::directory_iterator(lastgame_prefix)) {//与“可选择的配置文件的按钮”是相同配置方法
+			if (entry.is_regular_file()) {
+				Button* set = new Button(WindowWidth / 2, WindowHeight / 10 * (2 + i), WindowWidth / 5, WindowHeight / 25);
+				set->setString(entry.path().filename());
+				set->setid(-1 - i);
+				buttons.push_back(set);
+
+				allSettingsName.push_back(entry.path().filename());
+				i++;
+			}
+		}
+	}
+	//残局查看与选择
+	
+	if (peekmessage(m, EX_MOUSE)) {
+		if (m->message == WM_LBUTTONDOWN) {
+			int x = m->x; int y = m->y;
+			for (Button* i : buttons) {//检查按钮触发
+				if (i->ifIn(x, y)) {//在按钮范围内
+					if (i->uid() < 0) {
+						lastgamename = i->Word();
+						//在创建游戏时，依据残局文件创建游戏
+						ifLastgame = true;
+						check = true; state = 0;//返回主菜单
+					}//检查配置文件按钮
+					else {
+						switch (i->uid()) {
+						case 0: { check = true; state = 0; break; }
+						case 1: { check = true; state = 0; ifLastgame = false;lastgamename=L""; break; }
+						case 10: { this->createLastgame(); break; }
+						}
+					}
+					break;
+				}
+
+			}
+		}
+		else if (WM_MOUSEWHEEL) {
+			for (auto& i : buttons) {
+				if (i->uid() < 0) { i->moveY(m->wheel / 10); }
+			}
+		}//滚动滑轮
+	}
+	//确认残局信息
+}
+	
+
+//TODO如何创建残局？读取残局？
+bool GameManager::createLastgame(bool ready) {
+	if (!ready) {//创建新残局
+
+	}
+	else {//保存暂停的残局
+
+		std::wstring name;
+		wchar_t s[30];
+		int result = InputBox(s, 30,
+			L"保存当前游戏为残局，请填写残局名称\n"
+			L"要求：\n"
+			L"只能包含字母、数字或下划线\n");
+		if (result == 0) {
+			return false; // 用户点击取消
+		}
+		if (wcslen(s) == 0) {
+			MessageBox(GetHWnd(), L"残局名称不能为空", L"输入错误", MB_OK | MB_ICONERROR);
+			return false;
+		}
+		// 验证名称格式
+		for (size_t i = 0; i < wcslen(s); i++) {
+			wchar_t c = s[i];
+			if (!((c >= L'a' && c <= L'z') ||
+				(c >= L'A' && c <= L'Z') ||
+				(c >= L'0' && c <= L'9') ||
+				c == L'_')) {
+				MessageBox(GetHWnd(),
+					L"残局名称只能包含字母、数字或下划线\n"
+					L"请不要使用空格、中文或其他特殊字符",
+					L"输入错误", MB_OK | MB_ICONERROR);
+				return false;
+			}
+		}
+		name = s;
+		std::wstring fullPath = lastgame_prefix + name + lastgame_postfix;
+		if (std::filesystem::exists(fullPath)) {
+			int choice = MessageBox(GetHWnd(),
+				L"该残局名称已存在，是否覆盖？",
+				L"确认覆盖", MB_YESNO | MB_ICONWARNING);
+			if (choice != IDYES) {
+				return false;
+			}
+		}
+		std::ofstream o(fullPath, std::ios::binary);
+		if (!o.is_open()) {
+			MessageBox(GetHWnd(), L"无法创建残局文件", L"错误", MB_OK | MB_ICONERROR);
+			return false;
+		}
+		o.write((char*)&(thisgame->settings), sizeof(thisgame->settings));
+		thisgame->baffle->serialize(o);
+		thisgame->ball->serialize(o);
+		thisgame->map->serialize(o);
+		int score = thisgame->getScore();
+		o.write((char*)&score, sizeof(score));
+		int blood = thisgame->getblood();
+		o.write((char*)&blood, sizeof(blood));
+
+		o.close();
+
+		lastgamename = name;
+	}
+	ifLastgame = true;
+	return true;
 }

@@ -9,11 +9,53 @@ class Brick;//前向声明
 class Map
 {
 public:
+	Map() {};
 	Map(int seed,int xBlockNum ,int yBlockNum , int level);
 	void mapDraw();
 	bool is_empty();//判断地图上是否还有可摧毁砖块
 	void check(Ball* ball,aGame* game);//检测球与砖块的碰撞并处理
 	void clear();//清图，调试用。
+
+    // 序列化：将Map对象转换为字节流
+    void serialize(std::ofstream& out) const {
+        // 保存基本参数
+        out.write((char*)&xBlockNum, sizeof(xBlockNum));
+        out.write((char*)&yBlockNum, sizeof(yBlockNum));
+        out.write((char*)&BlockWidth, sizeof(BlockWidth));
+        out.write((char*)&BlockHeight, sizeof(BlockHeight));
+        out.write((char*)&BrickHeight, sizeof(BrickHeight));
+        out.write((char*)&BrickWidth, sizeof(BrickWidth));
+
+
+        for (const auto& row : bricks) {
+            for (const Brick& brick : row) {
+                brick.serialize(out); 
+            }
+        }
+    }
+    // 反序列化：从字节流恢复Map对象
+    void deserialize(std::ifstream& in) {
+        // 读取基本参数
+        in.read((char*)&xBlockNum, sizeof(xBlockNum));
+        in.read((char*)&yBlockNum, sizeof(yBlockNum));
+        in.read((char*)&BlockWidth, sizeof(BlockWidth));
+        in.read((char*)&BlockHeight, sizeof(BlockHeight));
+        in.read((char*)&BrickHeight, sizeof(BrickHeight));
+        in.read((char*)&BrickWidth, sizeof(BrickWidth));
+
+        bricks.resize(xBlockNum);
+        // 读取每一行
+        for (int i = 0; i < xBlockNum; i++) {
+            bricks[i].resize(yBlockNum);
+            // 读取当前行的每个Brick
+            for (int j = 0; j < yBlockNum; j++) {
+                bricks[i][j].deserialize(in);  
+            }
+        }
+    }
+
+
+
 private:
 	int xBlockNum;//横向砖块数量
 	int yBlockNum;//纵向砖块数量

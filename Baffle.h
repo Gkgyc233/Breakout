@@ -20,6 +20,20 @@ public:
 	int getlength() { return length; };
 	bool hitLeftWall() { return x <= 40; };//检测是否碰到左边墙壁
 	bool hitRightWall() { return x + length >= 740; };//检测是否碰到右边墙壁
+
+	void serialize(std::ofstream& out) const {//序列化函数
+		out.write(reinterpret_cast<const char*>(&x), sizeof(x));
+		out.write(reinterpret_cast<const char*>(&y), sizeof(y));
+		out.write(reinterpret_cast<const char*>(&length), sizeof(length));
+		out.write(reinterpret_cast<const char*>(&speed), sizeof(speed));
+	}
+	void deserialize(std::ifstream& in) {//反序列化函数
+		in.read(reinterpret_cast<char*>(&x), sizeof(x));
+		in.read(reinterpret_cast<char*>(&y), sizeof(y));
+		in.read(reinterpret_cast<char*>(&length), sizeof(length));
+		in.read(reinterpret_cast<char*>(&speed), sizeof(speed));
+	}
+
 private:
 	int length = WindowWidth*7/27;//挡板长度240px
 	int x =(780-length)/2, y=520;//初始坐标

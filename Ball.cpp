@@ -23,7 +23,10 @@ void Ball::setBall(int gameLevel, int base_v,int t) {
 }
 
 void Ball::ballMove() {
-	if (this->isFrozen()) return;
+	if (this->isFrozen()) {
+		this->x = baffle->getMid();
+		this->y = baffle->gety() - ballR;
+	}
 	//if (real_v > limit_v) real_v = limit_v;
 	vx =   real_v * 1.0 * cos(theta*pi/180.0);//计算速度分量
 	vy = - real_v * 1.0 * sin(theta*pi/180.0);

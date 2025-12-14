@@ -43,6 +43,7 @@ public:
 	int k = 1;//初始关卡
 };
 
+
 struct CollisionInfo {//碰撞信息
 	bool collided = false;//是否碰撞
 	bool in = false;//球心是否在矩形内
