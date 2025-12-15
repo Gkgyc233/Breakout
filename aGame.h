@@ -79,6 +79,6 @@ private:
 	int level;//关卡
 	int xBlockNum = 9;//横向格子数（3.2.1）//TODO:根据残局更改横纵格子数
 	int yBlockNum = 10;//纵向格子数（注：因为要放挡板和小球，只有上面一半的格子才会被砖占着）
-
+	int displayX = WallWidth * 2 + MapWidth + 20;//信息显示区左上角x坐标
 };
 

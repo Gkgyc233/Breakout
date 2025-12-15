@@ -5,11 +5,14 @@
 Map::Map(int seed,int xBlockNum , int yBlockNum ,int level) :ifempty(false) {//Ä¬ÈÏµÄµØÍ¼£º9*5£¬×©µÄÀàÐÍËægamelevel±ä»¯¡£
 	this->xBlockNum = xBlockNum;
 	this->yBlockNum = yBlockNum;
-	this->BlockWidth = 700 / xBlockNum;
-	this->BlockHeight = 200 / yBlockNum;
+	//this->BlockWidth = 700 / xBlockNum;
+	this->BlockWidth = MapWidth / xBlockNum;
+	//this->BlockHeight = 200 / yBlockNum;
+	this->BlockHeight =MapHeight / yBlockNum;
 	this->BrickHeight = BlockHeight * 9 / 10;
-	this->BrickWidth = BlockWidth * 9 / 10;
-	int cur_x = 45, cur_y = 45;
+	this->BrickWidth = BlockWidth * 9 / 10; 
+	//int cur_x = 45, cur_y = 45;
+	int cur_x = WallWidth + BlockWidth / 20, cur_y = WallHeight + BlockHeight / 10;//×©¿é³õÊ¼Î»ÖÃ
 	vector<vector<int>>* type = getRandType(level, seed, xBlockNum, yBlockNum);
 	for (int x = 0; x < xBlockNum; x++) {
 		this->bricks.push_back(std::vector<Brick>());
@@ -19,7 +22,7 @@ Map::Map(int seed,int xBlockNum , int yBlockNum ,int level) :ifempty(false) {//Ä
 			cur_y += BlockHeight;
 		}
 		cur_x += BlockWidth;
-		cur_y = 45;
+		cur_y = WallHeight + BlockHeight / 10;
 	}
 	delete type;
 }
@@ -43,10 +46,10 @@ bool Map::checkEmpty() {
 
 void Map::mapDraw() {
 	setfillcolor(WHITE);
-	fillrectangle(0, 0, 40, WindowHeight);//»æÖÆÇ½Ãæ¡¢Ìì»¨°å¡¢µØ°å
-	fillrectangle(740, 0, 780, WindowHeight);
-	fillrectangle(0, 0, 780, 40);
-	fillrectangle(0, 600, 780, WindowHeight);
+	fillrectangle(0, 0, WallWidth, WindowHeight);//×óÇ½
+	fillrectangle(WallWidth + MapWidth, 0, WallWidth * 2 + MapWidth, WindowHeight);//ÓÒÇ½
+	fillrectangle(0, 0, MapWidth + WallWidth, WallHeight);//Ìì»¨°å
+	fillrectangle(0, WindowHeight - WallHeight, MapWidth + WallWidth, WindowHeight);//µØ°å
 	for (int x = 0; x < xBlockNum; x++) {
 		for (int y = 0; y < yBlockNum; y++) {
 			bricks[x][y].brickDraw();
