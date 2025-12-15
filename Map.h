@@ -12,6 +12,7 @@ public:
 	Map():ifempty(false) {};
 	Map(int seed,int xBlockNum ,int yBlockNum , int level);
 	void mapDraw();
+    void setBrick(brickType t, int x, int y) { bricks[x][y].setType(t); }
 	bool is_empty();//判断地图上是否还有可摧毁砖块
 	void check(Ball* ball,aGame* game);//检测球与砖块的碰撞并处理
 	void clear();//清图，调试用。

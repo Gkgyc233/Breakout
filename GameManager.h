@@ -4,6 +4,7 @@
 #include "Button.h"
 class GameManager
 {private:
+	IMAGE& img;
 	ExMessage* m=new ExMessage;
 
 	int state = 0;//状态参数，0为主菜单，1为自定义配置界面，2为残局设定加载界面，3为游戏内界面，4为暂停保存残局界面，5为胜利界面，6为失败界面
@@ -36,6 +37,7 @@ class GameManager
 	void LastgameDraw() ;//进入残局设定加载界面绘制
 	bool createLastgame(bool ready = false);//创建新残局//返回是否创建成功
 
+
 	void Stop() ;//进入暂停界面
 	void StopDraw() ;//进入暂停界面绘制
 	void Start() ;//进入游戏状态与游戏进行
@@ -48,6 +50,7 @@ class GameManager
 
 public:
 	GameManager();
+	GameManager(IMAGE& img);
 	void draw();//整体的绘制函数//根据不同状态调用不同的绘制函数
 	void run();//游戏运行，检查输入信号，切换界面
 	bool ifRunning() { return ifrunning; };//游戏是否运行中//退出游戏结束程序

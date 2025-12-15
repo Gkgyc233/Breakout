@@ -43,14 +43,25 @@ void aGame::gameDraw(std::wstring setname) {
 	this->displayInfo(setname);
 }
 
-
+aGame::aGame(gameSettings set,int x,int y,int k) :ifWin(false), ifEnd(false), xBlockNum(x), yBlockNum(y){
+	this->settings = set;
+	this->baffle = new Baffle();
+	this->ball = new Ball();
+	this->map = new Map(set.seed, xBlockNum, yBlockNum, set.k);
+	this->scores = 0;
+	this->blood = 3;
+	this->level = k;
+	ball->setBall(level, set.basicV);
+	ball->linkBaffle(baffle);
+	baffle->adjust(level);
+}
 
 
 aGame::aGame(gameSettings set):ifWin(false), ifEnd(false) {
 	this->settings = set;
 	this->baffle = new Baffle();
 	this->ball = new Ball();
-	this->map = new Map(set.seed,xBlockNum,yBlockNum/2,set.k);
+	this->map = new Map(set.seed,xBlockNum,yBlockNum,set.k);
 	this->scores = 0;
 	this->blood = 3;
 	this->level = set.k;
@@ -61,21 +72,31 @@ aGame::aGame(gameSettings set):ifWin(false), ifEnd(false) {
 
 void aGame::displayInfo(std::wstring setname) {//显示血量、分数,etc.
 	settextcolor(WHITE);
+	int displayY = WindowHeight / 16;
 	std::basic_ostringstream<TCHAR> oss;//建立字符串流
 	oss << _T("score: ") << scores;
-	outtextxy(800, 40, (oss.str()).c_str());//输出分数
+	adjustHeight(WindowWidth * 4 / 18, (oss.str()).c_str());//调整字号，使得字符串不至于超出屏幕
+	outtextxy(displayX, displayY, (oss.str()).c_str());//输出分数
 	oss.str(_T(""));//清空字符串流
 	oss << _T("blood: ") << blood;
-	outtextxy(800, 100, (oss.str()).c_str());
+	adjustHeight(WindowWidth * 4 / 18, (oss.str()).c_str());
+	displayY += textheight((oss.str()).c_str());
+	outtextxy(displayX, displayY, (oss.str()).c_str());
 	oss.str(_T(""));
 	oss << _T("level: ") << level;
-	outtextxy(800, 160, (oss.str()).c_str());
+	adjustHeight(WindowWidth * 4 / 18, (oss.str()).c_str());
+	displayY += textheight((oss.str()).c_str());
+	outtextxy(displayX, displayY, (oss.str()).c_str());
 	oss.str(_T(""));
 	oss << _T("config:") ;
-	outtextxy(800, 220, (oss.str()).c_str());
+	adjustHeight(WindowWidth * 4 / 18, (oss.str()).c_str());
+	displayY += textheight((oss.str()).c_str());
+	outtextxy(displayX, displayY, (oss.str()).c_str());
 	oss.str(_T(""));
 	oss << setname;
-	outtextxy(800, 280, (oss.str()).c_str());
+	adjustHeight(WindowWidth * 4 / 18, (oss.str()).c_str());
+	displayY += textheight((oss.str()).c_str());
+	outtextxy(displayX, displayY, (oss.str()).c_str());
 	return;
 }
 

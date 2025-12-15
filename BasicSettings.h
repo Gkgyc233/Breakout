@@ -28,6 +28,12 @@ extern const int baffleWidth;//挡板厚度
 extern const int WindowWidth ;
 extern const int WindowHeight ;
 
+extern const int WallWidth;//墙壁宽度
+extern const int WallHeight;//墙壁高度
+
+extern const int MapWidth;//地图宽度
+extern const int MapHeight;//地图高度
+
 extern const std::wstring hz;//配置文件后缀
 extern const std::wstring mr;//配置文件目录
 
@@ -42,7 +48,7 @@ public:
 	int seed = -1;//种子
 	int k = 1;//初始关卡
 };
-
+enum brickType { Durable=1, Normal=0, Indestructible=2, No };//#,@,* 三种砖与没有砖的占位
 
 struct CollisionInfo {//碰撞信息
 	bool collided = false;//是否碰撞
@@ -55,10 +61,4 @@ CollisionInfo* collide(int ball_x, int ball_y, int r, int rect_x, int rect_y, in
 
 std::vector<std::vector<int>>*  getRandType(int level,int seed,int x,int y);//根据关卡等级返回随机砖块类型
 
-
-
-
-
-
-
-
+void adjustHeight(int aimWidth, LPCTSTR text);

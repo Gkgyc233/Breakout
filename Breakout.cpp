@@ -7,10 +7,11 @@
 
 int main()
 {
-    GameManager gm;
+    
     initgraph(WindowWidth, WindowHeight);
     IMAGE img(WindowWidth, WindowHeight);
     SetWorkingImage(&img);
+    GameManager gm(img);
     while (gm.ifRunning()) {//在没有退出游戏的情况下，不断循环刷新
         gm.run();
         gm.draw();
