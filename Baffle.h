@@ -7,9 +7,9 @@ public:
 	void baffleDraw();//绘制挡板
 	void baffleMove();//移动挡板
 	void adjust(int level) { //根据关卡调整挡板长度，最短60px
-		length = (WindowWidth * 7 / 27) * pow(0.95, level);
 		if (length < minLength) length = minLength;
 		x = (MapWidth + 2 * WallWidth - length) / 2;
+		x = (780 - length) / 2;
 		speed = 8 + 0.3 * level;
 		if (speed > 15.0) speed = 15.0;
 		return;
@@ -36,9 +36,9 @@ public:
 	}
 
 private:
-	int length = WindowWidth*7/27;//挡板长度
+	int length = WindowWidth * 7 / 27;//挡板长度
 	int minLength = WindowWidth / 18;//挡板最小长度
-	int x =(MapWidth + 2 * WallWidth -length)/2, y=WindowHeight * 13 / 16;//初始坐标
+	int x = (MapWidth + 2 * WallWidth - length) / 2, y = WindowHeight * 13 / 16;//初始坐标
 	float speed = 8;
 };
 

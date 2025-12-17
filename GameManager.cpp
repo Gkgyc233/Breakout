@@ -1,5 +1,5 @@
 #include"GameManager.h"
-GameManager::GameManager() {
+GameManager::GameManager(IMAGE&img):img(img) {
 	std::ifstream o(mr + settings + hz, std::ios::in | std::ios::binary);
 	if (o.is_open()) {
 		o.read((char*)&set, sizeof(set));
@@ -539,61 +539,281 @@ void GameManager::Lastgame() {
 }
 	
 
-//TODO如何创建残局？读取残局？
+//TODO如何创建残局？
 bool GameManager::createLastgame(bool ready) {
-	if (!ready) {//创建新残局
+	std::wstring name;
+	wchar_t s[30];
+	int result = InputBox(s, 30,
+		L"保存当前游戏为残局，请填写残局名称\n"
+		L"要求：\n"
+		L"只能包含字母、数字或下划线\n");
+	if (result == 0) {
+		return false; // 用户取消
+	}
+	if (wcslen(s) == 0) {
+		MessageBox(GetHWnd(), L"残局名称不能为空", L"输入错误", MB_OK | MB_ICONERROR);
+		return false;
+	}
+	// 验证名称格式
+	for (size_t i = 0; i < wcslen(s); i++) {
+		wchar_t c = s[i];
+		if (!((c >= L'a' && c <= L'z') ||
+			(c >= L'A' && c <= L'Z') ||
+			(c >= L'0' && c <= L'9') ||
+			c == L'_')) {
+			MessageBox(GetHWnd(),
+				L"残局名称只能包含字母、数字或下划线\n"
+				L"请不要使用空格、中文或其他特殊字符",
+				L"输入错误", MB_OK | MB_ICONERROR);
+			return false;
+		}
+	}
+	name = s;
+	std::wstring fullPath = lastgame_prefix + name + lastgame_postfix;
+	if (std::filesystem::exists(fullPath)) {
+		int choice = MessageBox(GetHWnd(),
+			L"该残局名称已存在，是否覆盖？",
+			L"确认覆盖", MB_YESNO | MB_ICONWARNING);
+		if (choice != IDYES) {
+			return false;
+		}
+	}
+	std::ofstream o(fullPath, std::ios::binary);
+	if (!o.is_open()) {
+		MessageBox(GetHWnd(), L"无法创建残局文件", L"错误", MB_OK | MB_ICONERROR);
+		return false;
+	}
 
+	if (!ready) {//创建新残局
+		int x, y, k;
+		{
+		wchar_t bufferX[30] = { 0 };
+		int resultX = InputBox(bufferX, 30,
+			L"请输入横向的砖块数\n"
+			L"要求：不小于8，不大于20的整数\n"
+			L"当前输入：");
+		if (bufferX[0] == L'\0') {
+			return false; // 用户取消
+		}
+		try {
+			x = std::stoi(bufferX);
+			if (x < 8 || x > 20) {
+				MessageBox(GetHWnd(), L"横向砖块数必须在8到20之间", L"输入错误", MB_OK | MB_ICONERROR);
+				return false;
+			}
+		}
+		catch (...) {
+			MessageBox(GetHWnd(), L"请输入有效的整数", L"输入错误", MB_OK | MB_ICONERROR);
+			return false;
+		}
+		wchar_t bufferY[30] = { 0 };
+		int resultY = InputBox(bufferY, 30,
+			L"请输入纵向的砖块数\n"
+			L"要求：不小于8，不大于20的整数\n"
+			L"当前输入：");
+		if (bufferY[0] == L'\0') {
+			return false; // 用户取消
+		}
+		try {
+			y = std::stoi(bufferY);
+			if (y < 8 || y > 20) {
+				MessageBox(GetHWnd(), L"纵向砖块数必须在8到20之间", L"输入错误", MB_OK | MB_ICONERROR);
+				return false;
+			}
+		}
+		catch (...) {
+			MessageBox(GetHWnd(), L"请输入有效的整数", L"输入错误", MB_OK | MB_ICONERROR);
+			return false;
+		}
+
+		wchar_t bufferK[30] = { 0 };
+		int resultK = InputBox(bufferK, 30,
+			L"请输入当前游戏等级\n"
+			L"请输入1-10之间的整数：");
+		if (bufferK[0] == L'\0') {
+			return false; // 用户取消
+		}
+		try {
+			k = std::stoi(bufferK);
+			if (k < 1 || k > 10) {
+				MessageBox(GetHWnd(), L"游戏等级必须在1到10之间", L"输入错误", MB_OK | MB_ICONERROR);
+				return false;
+			}
+		}
+		catch (...) {
+			MessageBox(GetHWnd(), L"请输入有效的整数", L"输入错误", MB_OK | MB_ICONERROR);
+			return false;
+		}
+
+		// 确认配置
+		std::wstring confirmMsg = L"配置信息：\n"
+			L"横向砖块数：" + std::to_wstring(x) + L"\n" +
+			L"纵向砖块数：" + std::to_wstring(y) + L"\n" +
+			L"游戏等级：" + std::to_wstring(k) + L"\n\n" +
+			L"是否采用当前配置创建残局？";
+
+		int confirm = MessageBox(GetHWnd(), confirmMsg.c_str(), L"确认配置", MB_YESNO | MB_ICONQUESTION);
+		if (confirm != IDYES) {
+			return false;
+		}
+	}
+		aGame* game = new aGame(set,x,y,k);
+		bool ifcontinue = true;
+		brickType t = Normal;
+		while (ifcontinue) {
+			cleardevice();
+			game->gameDraw(settings);
+			SetWorkingImage(); // 切换回屏幕
+			putimage(0, 0, &img); // 将内存图像输出到屏幕
+			SetWorkingImage(&img); // 切换回内存缓冲区
+			int xx, yy;//要修改的位置
+			wchar_t choiceBuffer[10] = { 0 };
+			switch (t) {
+			case 0: InputBox(choiceBuffer, 10,
+				L"当前砖块类型："
+				L"普通砖块 (白色)"
+				L"\n"
+				L"请选择操作:\n"
+				L"1. 修改砖块类型\n"
+				L"2. 切换当前砖块类型\n"
+				L"3. 完成编辑\n"
+				L"请输入数字 1-3:"); break;
+			case 1: InputBox(choiceBuffer, 10,
+				L"当前砖块类型："
+				L"耐久砖块 (金色)"
+				L"\n"
+				L"请选择操作:\n"
+				L"1. 修改砖块类型\n"
+				L"2. 切换当前砖块类型\n"
+				L"3. 完成编辑\n"
+				L"请输入数字 1-3:"); break;
+			case 2: InputBox(choiceBuffer, 10,
+				L"当前砖块类型："
+				L"坚不可摧 (灰色)"
+				L"\n"
+				L"请选择操作:\n"
+				L"1. 修改砖块类型\n"
+				L"2. 切换当前砖块类型\n"
+				L"3. 完成编辑\n"
+				L"请输入数字 1-3:"); break;
+			}
+			if (choiceBuffer[0] == L'\0') {
+				continue; // 用户取消，继续循环
+			}
+			int choice = 0;
+
+			try {
+				choice = std::stoi(choiceBuffer);
+				if (choice >= 1 && choice <= 3) {
+				}
+				else {
+					MessageBox(GetHWnd(), L"请输入1-3之间的数字", L"输入错误", MB_OK | MB_ICONERROR);
+				}
+			}
+			catch (...) {
+				MessageBox(GetHWnd(), L"请输入有效的数字", L"输入错误", MB_OK | MB_ICONERROR);
+				continue;
+			}
+			
+			switch (choice) {
+			case 1: { // 修改指定位置的砖块类型
+				int row = 0, col = 0;
+				bool validInput = false;
+
+				// 分别输入行和列
+				do {
+					std::wstring rowPrompt = L"请输入砖块所在的行号\n范围: 1-" + std::to_wstring(y) + L"\n当前输入：";
+					wchar_t rowBuffer[30] = { 0 };
+					InputBox(rowBuffer, 30, rowPrompt.c_str());
+					if (rowBuffer[0] == L'\0') {
+						break; // 用户取消
+					}
+					try {
+						row = std::stoi(rowBuffer);
+						if (row < 1 || row > y) {
+							std::wstring errorMsg = L"行号必须在1到" + std::to_wstring(y) + L"之间";
+							MessageBox(GetHWnd(), errorMsg.c_str(), L"输入错误", MB_OK | MB_ICONERROR);
+							continue;
+						}
+					}
+					catch (...) {
+						MessageBox(GetHWnd(), L"请输入有效的整数", L"输入错误", MB_OK | MB_ICONERROR);
+						continue;
+					}
+
+					std::wstring colPrompt = L"请输入砖块所在的列号\n范围: 1-" + std::to_wstring(x) + L"\n当前输入：";
+					wchar_t colBuffer[30] = { 0 };
+					InputBox(colBuffer, 30, colPrompt.c_str());
+					if (colBuffer[0] == L'\0') {
+						break; // 用户取消
+					}
+					try {
+						col = std::stoi(colBuffer);
+						if (col < 1 || col > x) {
+							std::wstring errorMsg = L"列号必须在1到" + std::to_wstring(x) + L"之间";
+							MessageBox(GetHWnd(), errorMsg.c_str(), L"输入错误", MB_OK | MB_ICONERROR);
+							continue;
+						}
+					}
+					catch (...) {
+						MessageBox(GetHWnd(), L"请输入有效的整数", L"输入错误", MB_OK | MB_ICONERROR);
+						continue;
+					}
+
+					validInput = true;
+				} while (!validInput);
+
+				if (validInput) {
+					xx = col - 1; // 转换为0-based索引
+					yy = row - 1; // 转换为0-based索引
+					game->SetMapBrick(t, xx, yy);
+				}
+				break;
+			}
+
+			case 2: { // 切换当前砖块类型
+				wchar_t typeBuffer[10] = { 0 };
+				InputBox(typeBuffer, 10,
+					L"请选择砖块类型:\n"
+					L"0: 普通砖块 (白色)\n"
+					L"1: 耐久砖块 (金色)\n"
+					L"2: 坚不可摧 (灰色)\n"
+					L"请输入数字 0-2:");
+
+				if (typeBuffer[0] == L'\0') {
+					continue;
+				}
+
+				int newType = std::stoi(typeBuffer);
+				if (newType >= 0 && newType <= 2) {
+					t = (brickType)newType;
+				}
+				else {
+					MessageBox(GetHWnd(), L"请输入有效的类型数字 (0-2)", L"错误", MB_OK | MB_ICONERROR);
+				}
+				break;
+			}
+
+			case 3: // 完成编辑
+				ifcontinue = false;
+				break;
+
+			default:
+				MessageBox(GetHWnd(), L"请输入有效的选项 (1-3)", L"错误", MB_OK | MB_ICONERROR);
+				break;
+			}
+			Sleep(10);
+		}
+		game->serialize(o);
+		o.close();
 	}
 	else {//保存暂停的残局
-
-		std::wstring name;
-		wchar_t s[30];
-		int result = InputBox(s, 30,
-			L"保存当前游戏为残局，请填写残局名称\n"
-			L"要求：\n"
-			L"只能包含字母、数字或下划线\n");
-		if (result == 0) {
-			return false; // 用户点击取消
-		}
-		if (wcslen(s) == 0) {
-			MessageBox(GetHWnd(), L"残局名称不能为空", L"输入错误", MB_OK | MB_ICONERROR);
-			return false;
-		}
-		// 验证名称格式
-		for (size_t i = 0; i < wcslen(s); i++) {
-			wchar_t c = s[i];
-			if (!((c >= L'a' && c <= L'z') ||
-				(c >= L'A' && c <= L'Z') ||
-				(c >= L'0' && c <= L'9') ||
-				c == L'_')) {
-				MessageBox(GetHWnd(),
-					L"残局名称只能包含字母、数字或下划线\n"
-					L"请不要使用空格、中文或其他特殊字符",
-					L"输入错误", MB_OK | MB_ICONERROR);
-				return false;
-			}
-		}
-		name = s;
-		std::wstring fullPath = lastgame_prefix + name + lastgame_postfix;
-		if (std::filesystem::exists(fullPath)) {
-			int choice = MessageBox(GetHWnd(),
-				L"该残局名称已存在，是否覆盖？",
-				L"确认覆盖", MB_YESNO | MB_ICONWARNING);
-			if (choice != IDYES) {
-				return false;
-			}
-		}
-		std::ofstream o(fullPath, std::ios::binary);
-		if (!o.is_open()) {
-			MessageBox(GetHWnd(), L"无法创建残局文件", L"错误", MB_OK | MB_ICONERROR);
-			return false;
-		}
-		
 		thisgame->serialize(o);
 		o.close();
-
-		lastgamename = name;
 	}
+	lastgamename = name;
 	ifLastgame = true;
 	return true;
 }
+
+

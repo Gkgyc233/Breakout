@@ -10,6 +10,7 @@ public:
     Brick() {};
 		Brick(int x,int y,int h,int w,int brickType = 0): x(x),y(y),h(h),w(w),brickType(brickType){};
 		int Type() { return brickType; };
+        void setType(brickType t) { brickType = t; }
 		void brickDraw();
 		void check(Ball* ball,aGame* game);//检测与球的碰撞并处理
 		void destroy() { brickType = 3; }//自毁，调试用。

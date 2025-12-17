@@ -2,15 +2,16 @@
 #include "Brick.h"
 #include "Ball.h"
 #include <vector>
-Map::Map(int seed,int xBlockNum , int yBlockNum ,int level) :ifempty(false) {//默认的地图：9*5，砖的类型随gamelevel变化。
+Map::Map(int seed,int xBlockNum , int yBlockNum ,int level) :ifempty(false) {//默认的地图：10*10，砖的类型随gamelevel变化。
 	this->xBlockNum = xBlockNum;
 	this->yBlockNum = yBlockNum;
 	//this->BlockWidth = 700 / xBlockNum;
 	this->BlockWidth = MapWidth / xBlockNum;
 	//this->BlockHeight = 200 / yBlockNum;
-	this->BlockHeight =MapHeight / yBlockNum;
+	this->BlockHeight = MapHeight / yBlockNum;
 	this->BrickHeight = BlockHeight * 9 / 10;
-	this->BrickWidth = BlockWidth * 9 / 10; 
+	this->BrickWidth = BlockWidth * 9 / 10;
+	this->BrickWidth = BlockWidth * 9 / 10;
 	//int cur_x = 45, cur_y = 45;
 	int cur_x = WallWidth + BlockWidth / 20, cur_y = WallHeight + BlockHeight / 10;//砖块初始位置
 	vector<vector<int>>* type = getRandType(level, seed, xBlockNum, yBlockNum);

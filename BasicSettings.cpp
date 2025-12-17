@@ -8,12 +8,11 @@ const int baffleWidth = 40;//挡板厚度
 const int WindowWidth = 1080;
 const int WindowHeight = 640;
 
+
 const int WallWidth = WindowWidth / 27;//墙壁宽度(WindowWidth * 40 / 1080)
 const int WallHeight = WindowHeight / 16;//墙壁高度(WindowHeight * 40 / 640)
 const int MapWidth = WindowWidth * 70 / 108;
 const int MapHeight = WindowHeight * 20 / 64;
-
-enum brickType { Durable, Normal, Indestructible, No };//#,@,* 三种砖与没有砖的占位
 
 const std::wstring hz = L".config";
 const std::wstring mr = L".\\config\\";
@@ -74,7 +73,7 @@ std::vector<std::vector<int>>* getRandType(int level,int seed,int x,int y) {
 
 void adjustHeight(int aimWidth, LPCTSTR text) {//用二分查找寻找合适的字号高度，使得text显示出来的宽度尽可能接近aimWidth
 	int min = 5, max = 500;//二分查找的上下界
-	while (min < max-3) {
+	while (min < max - 3) {
 		int mid = (min + max) / 2;
 		settextstyle(mid, 0, _T("Consolas"));
 		if (textwidth(text) < aimWidth) {
