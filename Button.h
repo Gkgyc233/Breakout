@@ -32,9 +32,11 @@ public:
 		setbkmode(TRANSPARENT);
 
 		settextstyle(yy, 0, _T("Consolas"));
+		if (textwidth(word.c_str()) >= 2 * xx) {//缩小字号，适应按钮大小
+			adjustHeight(2 * xx, word.c_str());
+		}
 		int textWidth = textwidth(word.c_str());
 		int textHeight = textheight(word.c_str());
-
 		// 输出居中文字
 		outtextxy(x - textWidth / 2, y - textHeight / 2, word.c_str());
 	}

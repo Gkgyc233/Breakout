@@ -18,6 +18,8 @@ public:
 	int getx() { return x; };
 	int gety() { return y; };
 	int getlength() { return length; };
+	int getspeed() { return speed; };
+	int getmoving() { return moving; };
 	bool hitLeftWall() { return x <= WallWidth; };//检测是否碰到左边墙壁
 	bool hitRightWall() { return x + length >= WallWidth + MapWidth; };//检测是否碰到右边墙壁
 
@@ -40,5 +42,6 @@ private:
 	int minLength = WindowWidth / 18;//挡板最小长度
 	int x = (MapWidth + 2 * WallWidth - length) / 2, y = WindowHeight * 13 / 16;//初始坐标
 	float speed = 8;
+	int moving = 0;//移动方向，-1左移，1右移，0不动
 };
 

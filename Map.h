@@ -1,8 +1,8 @@
 #pragma once
 #include "BasicSettings.h"
 #include "Brick.h"
-#include <vector> // 修正：确保包含 vector 头文件
-using std::vector; // 修正：使用 std 命名空间下的 vector
+#include <vector> 
+using std::vector; 
 
 class Ball;//前向声明
 class Brick;//前向声明

@@ -35,13 +35,21 @@ void Ball::ballMove() {
 	return;
 }
 
-void Ball::collideWithBaffle() {
+void Ball::collideWithBaffle() {//反弹公式：球的合速度不变，球的水平速度变成原本水平速度+挡板与其的速度差的一半。
 	CollisionInfo* info = collide(x, y, ballR, baffle->getx(), baffle->gety(), baffle->getlength(), baffleWidth);//判断球与版是否碰撞
 	if (info->collided && (info->collisionY - baffle->gety())<=20) {//若碰撞到挡板的水平面
-		float dx = (info->collisionX - baffle->getMid())*1.0/(baffle->getlength());//计算碰撞点与挡板中点的归一化水平距离
-		theta = 90 - dx * 50.0;//根据碰撞点调整反弹角度，最大偏转50度
+		//float dx = (info->collisionX - baffle->getMid())*1.0/(baffle->getlength());//计算碰撞点与挡板中点的归一化水平距离
+		vx = real_v * 1.0 * cos(theta * pi / 180.0);//计算水平速度分量
+		//theta = 90 - dx * 50.0;//根据碰撞点调整反弹角度，最大偏转50度
+
+		int baffleSpd = baffle->getspeed() * baffle->getmoving();//获取挡板速度，向右(x↑)为正
+		if(baffleSpd != 0) vx += (baffleSpd - vx) / 2;//应用反弹公式
+
+		vy = -real_v * 1.0 * sin(theta * pi / 180.0);//计算垂直速度分量
+		vy *= -1;//翻转垂直速度分量
+		theta = atan2(-vy, vx) / pi * 180;//更新方向角度
+
 		y = baffle->gety() - ballR;//调整位置，防止卡在挡板内
-		//TODO:根据碰撞点调整反弹角度
 	}
 	delete info;
 	return;
