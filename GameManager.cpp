@@ -51,7 +51,7 @@ void GameManager::MenuCheck() {
 		buttons.push_back(begin);
 
 		Button* setting = new Button(WindowWidth / 5, WindowHeight / 2, WindowWidth / 5, WindowHeight / 12);
-		setting->setString(L"当前配置：" + settings);
+		setting->setString(_T("当前配置：") + settings);
 		setting->setid(1);
 		buttons.push_back(setting);
 

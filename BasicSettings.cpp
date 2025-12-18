@@ -20,7 +20,6 @@ const std::wstring mr = L".\\config\\";
 const std::wstring lastgame_prefix = L".\\endgames\\";
 const std::wstring lastgame_postfix = L".end";
 
-const float g = 0.2;//ÖØÁ¦¼ÓËÙ¶È
 
 CollisionInfo* collide(int ball_x, int ball_y, int r, int rect_x, int rect_y, int rect_width, int rect_height) {//ÅĞ¶ÏÇòÓë¾ØĞÎµÄÅö×²
 	CollisionInfo* info = new CollisionInfo;
@@ -40,13 +39,12 @@ CollisionInfo* collide(int ball_x, int ball_y, int r, int rect_x, int rect_y, in
 std::vector<std::vector<int>>* getRandType(int level,int seed,int x,int y) {
 	std::vector<std::vector<int>>* type = new std::vector<std::vector<int>>;
 	int sd;
-	if (seed == -1) {
+	if (seed == -1) {//»ñÈ¡Ëæ»úÖÖ×Ó
 		sd = static_cast<int>(std::time(nullptr));
 	}
-	else {
+	else {//Ê¹ÓÃÖ¸¶¨ÖÖ×Ó
 		sd = seed+level-1;
 	}
-	//std::random_device rd;//»ñÈ¡Ëæ»úÊıÖÖ×Ó
 	std::mt19937 gen;
 	gen.seed(sd);//Ê¹ÓÃÃ·É­Ğı×ªËã·¨Éú³ÉËæ»úÊı
 	std::uniform_int_distribution<> dis(1, 1000);//Éú³É1µ½1000µÄ¾ùÔÈ·Ö²¼Ëæ»úÕûÊı
@@ -73,7 +71,7 @@ std::vector<std::vector<int>>* getRandType(int level,int seed,int x,int y) {
 
 void adjustHeight(int aimWidth, LPCTSTR text) {//ÓÃ¶ş·Ö²éÕÒÑ°ÕÒºÏÊÊµÄ×ÖºÅ¸ß¶È£¬Ê¹µÃtextÏÔÊ¾³öÀ´µÄ¿í¶È¾¡¿ÉÄÜ½Ó½üaimWidth
 	int min = 5, max = 500;//¶ş·Ö²éÕÒµÄÉÏÏÂ½ç
-	while (min < max - 3) {
+	while (min < max - 1) {
 		int mid = (min + max) / 2;
 		settextstyle(mid, 0, _T("Consolas"));
 		if (textwidth(text) < aimWidth) {
@@ -84,6 +82,8 @@ void adjustHeight(int aimWidth, LPCTSTR text) {//ÓÃ¶ş·Ö²éÕÒÑ°ÕÒºÏÊÊµÄ×ÖºÅ¸ß¶È£¬Ê
 		}
 		else break;
 	}
+	settextstyle(min, 0, _T("Consolas"));
+	return;
 }
 
 /*

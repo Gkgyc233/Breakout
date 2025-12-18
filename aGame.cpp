@@ -89,12 +89,12 @@ void aGame::displayInfo(std::wstring setname) {//显示血量、分数,etc.
 	outtextxy(displayX, displayY, (oss.str()).c_str());
 	oss.str(_T(""));
 	oss << _T("config:") ;
-	adjustHeight(WindowWidth * 4 / 18, (oss.str()).c_str());
+	if(textwidth((oss.str()).c_str()) > WindowWidth * 4 / 18 ) adjustHeight(WindowWidth * 4 / 18, (oss.str()).c_str());
 	displayY += textheight((oss.str()).c_str());
 	outtextxy(displayX, displayY, (oss.str()).c_str());
 	oss.str(_T(""));
 	oss << setname;
-	adjustHeight(WindowWidth * 4 / 18, (oss.str()).c_str());
+	if (textwidth((oss.str()).c_str()) > WindowWidth * 4 / 18) adjustHeight(WindowWidth * 4 / 18, (oss.str()).c_str());
 	displayY += textheight((oss.str()).c_str());
 	outtextxy(displayX, displayY, (oss.str()).c_str());
 	return;
