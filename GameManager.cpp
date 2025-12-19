@@ -696,6 +696,15 @@ bool GameManager::createLastgame(bool ready) {
 				L"2. 切换当前砖块类型\n"
 				L"3. 完成编辑\n"
 				L"请输入数字 1-3:"); break;
+			case 3: InputBox(choiceBuffer, 10,
+				L"当前砖块类型："
+				L"无砖块，取消放置"
+				L"\n"
+				L"请选择操作:\n"
+				L"1. 修改砖块类型\n"
+				L"2. 切换当前砖块类型\n"
+				L"3. 完成编辑\n"
+				L"请输入数字 1-3:"); break;
 			}
 			if (choiceBuffer[0] == L'\0') {
 				continue; // 用户取消，继续循环
@@ -778,18 +787,19 @@ bool GameManager::createLastgame(bool ready) {
 					L"0: 普通砖块 (白色)\n"
 					L"1: 耐久砖块 (金色)\n"
 					L"2: 坚不可摧 (灰色)\n"
-					L"请输入数字 0-2:");
+					L"3: 无砖块，取消放置\n"
+					L"请输入数字 0-3:");
 
 				if (typeBuffer[0] == L'\0') {
 					continue;
 				}
 
 				int newType = std::stoi(typeBuffer);
-				if (newType >= 0 && newType <= 2) {
+				if (newType >= 0 && newType <= 3) {
 					t = (brickType)newType;
 				}
 				else {
-					MessageBox(GetHWnd(), L"请输入有效的类型数字 (0-2)", L"错误", MB_OK | MB_ICONERROR);
+					MessageBox(GetHWnd(), L"请输入有效的类型数字 (0-3)", L"错误", MB_OK | MB_ICONERROR);
 				}
 				break;
 			}

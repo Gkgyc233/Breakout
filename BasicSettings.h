@@ -16,14 +16,8 @@
 
 #define pi 3.1415926
 
-class Endgame//用于存储残局信息的类
-{
-};
-
-
 extern const int ballR ;//球半径
 extern const int baffleWidth;//挡板厚度
-//extern const int baffleSpeed;//挡板速度
 
 extern const int WindowWidth ;
 extern const int WindowHeight ;
@@ -48,7 +42,7 @@ public:
 	int seed = -1;//种子
 	int k = 1;//初始关卡
 };
-enum brickType { Durable=1, Normal=0, Indestructible=2, No };//#,@,* 三种砖与没有砖的占位
+enum brickType {  Normal, Durable , Indestructible, No };//#,@,* 三种砖与没有砖的占位
 
 struct CollisionInfo {//碰撞信息
 	bool collided = false;//是否碰撞
