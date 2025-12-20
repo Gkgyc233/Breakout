@@ -77,8 +77,8 @@ private:
 	bool ifWin = false;//是否在通关状态
 	bool ifStop = false;
 	int level;//关卡
-	int xBlockNum = 10;//横向格子数
-	int yBlockNum = 10;//纵向格子数（注：因为要放挡板和小球，只有上半部分才会被砖占着）
+	int xBlockNum = 18;//横向格子数
+	int yBlockNum = 9;//纵向格子数（注：因为要放挡板和小球，只有上半部分才会被砖占着）
 
 	int displayX = WallWidth * 2 + MapWidth + 20;//信息显示区左上角x坐标
 };
