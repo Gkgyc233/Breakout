@@ -20,7 +20,7 @@ public:
 		delete msg;
 	}
 	void gameDraw(std::wstring setname) ;//绘制一局游戏内的物品
-	void gameRun() ;//一局游戏运行
+	void gameRun() ;//一局游戏运行
 	void SetMapBrick(brickType t, int x, int y) { map->setBrick(t, x, y); }//修改地图砖块
 	bool ifend() { return ifEnd; }
 	bool ifwin() { return ifWin; }
