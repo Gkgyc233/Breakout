@@ -2,32 +2,37 @@
 #include "Brick.h"
 #include "Ball.h"
 #include <vector>
-Map::Map(int seed,int xBlockNum , int yBlockNum ,int level) {//默认的地图：9*5，砖的类型随gamelevel变化。
+Map::Map(int seed,int xBlockNum , int yBlockNum ,int level) :ifempty(false) {//地图（默认为10*10），砖的类型随gamelevel变化。
 	this->xBlockNum = xBlockNum;
 	this->yBlockNum = yBlockNum;
-	this->BlockWidth = 700 / xBlockNum;
-	this->BlockHeight = 200 / yBlockNum;
+	this->BlockWidth = MapWidth / xBlockNum;
+	this->BlockHeight = MapHeight / yBlockNum;
 	this->BrickHeight = BlockHeight * 9 / 10;
 	this->BrickWidth = BlockWidth * 9 / 10;
-	int cur_x = 45, cur_y = 45;
+	this->BrickWidth = BlockWidth * 9 / 10;
+	int cur_x = WallWidth + BlockWidth / 20, cur_y = WallHeight + BlockHeight / 10;//砖块初始位置
 	vector<vector<int>>* type = getRandType(level, seed, xBlockNum, yBlockNum);
 	for (int x = 0; x < xBlockNum; x++) {
 		this->bricks.push_back(std::vector<Brick>());
 		for (int y = 0; y < yBlockNum; y++) {
-			//int type = getRandType(level,seed);//根据level调整砖块类型
 			this->bricks[x].push_back(Brick(cur_x, cur_y, BrickHeight, BrickWidth, (*type)[x][y]));//生成砖块
 			cur_y += BlockHeight;
 		}
 		cur_x += BlockWidth;
-		cur_y = 45;
+		cur_y = WallHeight + BlockHeight / 10;
 	}
 	delete type;
 }
 
 bool Map::is_empty() {//检测是否所有可以被打掉的砖都被打掉了
+	ifempty = checkEmpty();
+	return ifempty;
+}
+
+bool Map::checkEmpty() {
 	for (int x = 0; x < xBlockNum; x++) {
 		for (int y = 0; y < yBlockNum; y++) {
-			if(bricks[x][y].Type()<=1){//若为普通砖或耐久砖
+			if (bricks[x][y].Type() <= 1) {//若为普通砖或耐久砖
 				return false;
 			}
 		}
@@ -35,12 +40,13 @@ bool Map::is_empty() {//检测是否所有可以被打掉的砖都被打掉了
 	return true;
 }
 
+
 void Map::mapDraw() {
 	setfillcolor(WHITE);
-	fillrectangle(0, 0, 40, WindowHeight);//绘制墙面、天花板、地板
-	fillrectangle(740, 0, 780, WindowHeight);
-	fillrectangle(0, 0, 780, 40);
-	fillrectangle(0, 600, 780, WindowHeight);
+	fillrectangle(0, 0, WallWidth, WindowHeight);//左墙
+	fillrectangle(WallWidth + MapWidth, 0, WallWidth * 2 + MapWidth, WindowHeight);//右墙
+	fillrectangle(0, 0, MapWidth + WallWidth, WallHeight);//天花板
+	fillrectangle(0, WindowHeight - WallHeight, MapWidth + WallWidth, WindowHeight);//地板
 	for (int x = 0; x < xBlockNum; x++) {
 		for (int y = 0; y < yBlockNum; y++) {
 			bricks[x][y].brickDraw();
