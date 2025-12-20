@@ -34,8 +34,10 @@ public:
 	Baffle* baffle;//挡板
 	Map* map;//砖块地图，可以用于加载残局
 	Button stop=Button(WindowWidth/10*9,WindowHeight/10*9,WindowWidth/20,WindowHeight/20);
+	Button restart=Button(WindowWidth/10*9,WindowHeight/20*15,WindowWidth/20,WindowHeight/20);
 
 	bool ifstop() { return ifStop; }
+	bool ifrestart() { return ifRestart; }
 	void nostop() { ifStop = false; }
 	int getblood() { return blood; }
 
@@ -76,6 +78,7 @@ private:
 	bool ifEnd = false;
 	bool ifWin = false;//是否在通关状态
 	bool ifStop = false;
+	bool ifRestart = false;
 	int level;//关卡
 	int DefaultXBlockNum = 9;//横向格子数
 	int DefaultYBlockNum = 5;//纵向格子数的一半（注："一半"是因为主绘图区下面要放挡板和小球，只有上半部分才会被砖占着）

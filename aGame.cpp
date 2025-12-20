@@ -17,6 +17,7 @@ aGame::aGame(std::wstring lastgame):baffle(),ball(),map(),ifEnd(false),ifWin(fal
 	else { std::cout << "无法读取残局文件";std::wcout << (fullname); }
 	in.close();
 	stop.setString(L"暂停");
+	restart.setString(L"重玩本关");
 };
 
 aGame::aGame(gameSettings set, int x, int y, int gameLevel) :ifWin(false), ifEnd(false), DefaultXBlockNum(x), DefaultYBlockNum(y) {
@@ -31,6 +32,7 @@ aGame::aGame(gameSettings set, int x, int y, int gameLevel) :ifWin(false), ifEnd
 	ball->linkBaffle(baffle);
 	baffle->adjust(level);
 	stop.setString(L"暂停");
+	restart.setString(L"重玩本关");
 }
 
 
@@ -46,6 +48,7 @@ aGame::aGame(gameSettings set) :ifWin(false), ifEnd(false) {
 	ball->linkBaffle(baffle);
 	baffle->adjust(level);
 	stop.setString(L"暂停");
+	restart.setString(L"重玩本关");
 }
 
 aGame::aGame(aGame* ori) {
@@ -63,6 +66,7 @@ aGame::aGame(aGame* ori) {
 	ball->linkBaffle(baffle);
 	baffle->adjust(level);
 	stop.setString(L"暂停");
+	restart.setString(L"重玩本关");
 }
 
 void aGame::gameRun() {
@@ -92,6 +96,7 @@ void aGame::gameRun() {
 		if (m->message == WM_LBUTTONDOWN) {
 			int x = m->x; int y = m->y;
 			if (stop.ifIn(x, y)) { ifStop = true; }
+			if (restart.ifIn(x, y)) { ifRestart = true; }
 		}
 	}
 }
@@ -102,6 +107,7 @@ void aGame::gameDraw(std::wstring setname) {
 	map->mapDraw();
 	this->displayInfo(setname);
 	stop.draw();
+	restart.draw();
 }
 
 void aGame::displayInfo(std::wstring setname) {//显示血量、分数,etc.

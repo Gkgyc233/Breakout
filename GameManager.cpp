@@ -322,6 +322,10 @@ void GameManager::Start() {
 		check = true;
 		nextlevel = true;
 	}
+	else if (thisgame->ifrestart()) {//若重新开始本关
+		delete thisgame;
+		thisgame = new aGame(snapshot);
+	}
 	else {
 		thisgame->gameRun();
 		if ((GetAsyncKeyState('P') & 0x8000)||thisgame->ifstop()) {
