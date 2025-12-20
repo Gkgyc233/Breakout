@@ -9,10 +9,10 @@ class aGame
 {
 public:
 	ExMessage* m = new ExMessage;
-	aGame() :ifWin(false),ifEnd(false) {};//默认构造函数
-	aGame(gameSettings set) ;//从配置创建
 	aGame(gameSettings set, int x, int y,int gameLevel);
-	aGame(std::wstring lastgamename);//从残局创建
+	aGame(gameSettings set);//从配置创建游戏
+	aGame(std::wstring lastgamename);//从残局创建游戏
+	aGame(aGame* ori);//复制构造函数
 	~aGame() {
 		delete ball;
 		delete baffle;
@@ -77,9 +77,8 @@ private:
 	bool ifWin = false;//是否在通关状态
 	bool ifStop = false;
 	int level;//关卡
-	int xBlockNum = 10;//横向格子数
-	int yBlockNum = 10;//纵向格子数（注：因为要放挡板和小球，只有上半部分才会被砖占着）
-
+	int DefaultXBlockNum = 9;//横向格子数
+	int DefaultYBlockNum = 5;//纵向格子数的一半（注："一半"是因为主绘图区下面要放挡板和小球，只有上半部分才会被砖占着）
 	int displayX = WallWidth * 2 + MapWidth + 20;//信息显示区左上角x坐标
 };
 
