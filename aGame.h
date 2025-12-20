@@ -1,4 +1,4 @@
-#pragma once//µ¥¾ÖÓÎÏ·
+#pragma once//å•å±€æ¸¸æˆ
 #include "Ball.h"
 #include "Baffle.h"
 #include "Brick.h"
@@ -10,29 +10,29 @@ class aGame
 public:
 	ExMessage* m = new ExMessage;
 	aGame(gameSettings set, int x, int y,int gameLevel);
-	aGame(gameSettings set);//´ÓÅäÖÃ´´½¨ÓÎÏ·
-	aGame(std::wstring lastgamename);//´Ó²Ğ¾Ö´´½¨ÓÎÏ·
-	aGame(aGame* ori);//¸´ÖÆ¹¹Ôìº¯Êı
+	aGame(gameSettings set);//ä»é…ç½®åˆ›å»ºæ¸¸æˆ
+	aGame(std::wstring lastgamename);//ä»æ®‹å±€åˆ›å»ºæ¸¸æˆ
+	aGame(aGame* ori);//å¤åˆ¶æ„é€ å‡½æ•°
 	~aGame() {
 		delete ball;
 		delete baffle;
 		delete map;
 		delete msg;
 	}
-	void gameDraw(std::wstring setname) ;//»æÖÆÒ»¾ÖÓÎÏ·ÄÚµÄÎïÆ·
-	void gameRun() ;//Ò»¾ÖÓÎÏ·ÔËĞĞ
-	void SetMapBrick(brickType t, int x, int y) { map->setBrick(t, x, y); }//ĞŞ¸ÄµØÍ¼×©¿é
+	void gameDraw(std::wstring setname) ;//ç»˜åˆ¶ä¸€å±€æ¸¸æˆå†…çš„ç‰©å“
+	void gameRun() ;//ä¸€å±€æ¸¸æˆè¿è¡Œ
+	void SetMapBrick(brickType t, int x, int y) { map->setBrick(t, x, y); }//ä¿®æ”¹åœ°å›¾ç –å—
 	bool ifend() { return ifEnd; }
 	bool ifwin() { return ifWin; }
-	void displayInfo(std::wstring setname);//»æÖÆÓÎÏ·ĞÅÏ¢£¨ÑªÁ¿¡¢¹Ø¿¨µÈ£©
-	void earnScore() { scores++; }//µÃ·Ö
-	int  getScore() { return scores; }//»ñÈ¡·ÖÊı
-	void nextLevel();//½øÈëÏÂÒ»¹Ø
-	gameSettings settings;//ÈıÑùÄ¬ÈÏ»ò×Ô¶¨ÒåÉèÖÃ
+	void displayInfo(std::wstring setname);//ç»˜åˆ¶æ¸¸æˆä¿¡æ¯ï¼ˆè¡€é‡ã€å…³å¡ç­‰ï¼‰
+	void earnScore() { scores++; }//å¾—åˆ†
+	int  getScore() { return scores; }//è·å–åˆ†æ•°
+	void nextLevel();//è¿›å…¥ä¸‹ä¸€å…³
+	gameSettings settings;//ä¸‰æ ·é»˜è®¤æˆ–è‡ªå®šä¹‰è®¾ç½®
 
-	Ball* ball;//Ğ¡Çò
-	Baffle* baffle;//µ²°å
-	Map* map;//×©¿éµØÍ¼£¬¿ÉÒÔÓÃÓÚ¼ÓÔØ²Ğ¾Ö
+	Ball* ball;//å°çƒ
+	Baffle* baffle;//æŒ¡æ¿
+	Map* map;//ç –å—åœ°å›¾ï¼Œå¯ä»¥ç”¨äºåŠ è½½æ®‹å±€
 	Button stop=Button(WindowWidth/10*9,WindowHeight/10*9,WindowWidth/20,WindowHeight/20);
 
 	bool ifstop() { return ifStop; }
@@ -71,14 +71,14 @@ public:
 
 private:
 	ExMessage* msg = new ExMessage;
-	int scores;//·ÖÊı
-	int blood;//ÑªÁ¿
+	int scores;//åˆ†æ•°
+	int blood;//è¡€é‡
 	bool ifEnd = false;
-	bool ifWin = false;//ÊÇ·ñÔÚÍ¨¹Ø×´Ì¬
+	bool ifWin = false;//æ˜¯å¦åœ¨é€šå…³çŠ¶æ€
 	bool ifStop = false;
-	int level;//¹Ø¿¨
-	int DefaultXBlockNum = 9;//ºáÏò¸ñ×ÓÊı
-	int DefaultYBlockNum = 5;//×İÏò¸ñ×ÓÊıµÄÒ»°ë£¨×¢£º"Ò»°ë"ÊÇÒòÎªÖ÷»æÍ¼ÇøÏÂÃæÒª·Åµ²°åºÍĞ¡Çò£¬Ö»ÓĞÉÏ°ë²¿·Ö²Å»á±»×©Õ¼×Å£©
-	int displayX = WallWidth * 2 + MapWidth + 20;//ĞÅÏ¢ÏÔÊ¾Çø×óÉÏ½Çx×ø±ê
+	int level;//å…³å¡
+	int DefaultXBlockNum = 9;//æ¨ªå‘æ ¼å­æ•°
+	int DefaultYBlockNum = 5;//çºµå‘æ ¼å­æ•°çš„ä¸€åŠï¼ˆæ³¨ï¼š"ä¸€åŠ"æ˜¯å› ä¸ºä¸»ç»˜å›¾åŒºä¸‹é¢è¦æ”¾æŒ¡æ¿å’Œå°çƒï¼Œåªæœ‰ä¸ŠåŠéƒ¨åˆ†æ‰ä¼šè¢«ç –å ç€ï¼‰
+	int displayX = WallWidth * 2 + MapWidth + 20;//ä¿¡æ¯æ˜¾ç¤ºåŒºå·¦ä¸Šè§’xåæ ‡
 };
 
