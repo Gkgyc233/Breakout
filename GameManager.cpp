@@ -322,7 +322,7 @@ void GameManager::Start() {
 	}
 	else {
 		thisgame->gameRun();
-		if (GetAsyncKeyState('P') & 0x8000) {
+		if ((GetAsyncKeyState('P') & 0x8000)||thisgame->ifstop()) {
 			state = 4;
 			check = true;
 		}
@@ -363,8 +363,8 @@ void GameManager::Stop() {
 			for (Button* i : buttons) {//检查按钮触发
 				if (i->ifIn(x, y)) {
 					switch (i->uid()) {
-					case 0: { check = true; state = 3; Start(); break; }
-					case 1: {  if (createLastgame(true)) { check = true; state = 3; Start(); }; break; }//保存残局信息后继续游戏
+					case 0: { check = true; state = 3; thisgame->nostop(); Start(); break; }
+					case 1: { if (createLastgame(true)) { check = true; state = 3; thisgame->nostop(); Start(); }; break; }//保存残局信息后继续游戏
 					}
 					break;
 				}

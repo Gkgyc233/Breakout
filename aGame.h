@@ -3,11 +3,12 @@
 #include "Baffle.h"
 #include "Brick.h"
 #include "Map.h"
-
+#include "Button.h"
 
 class aGame
 {
 public:
+	ExMessage* m = new ExMessage;
 	aGame() :ifWin(false),ifEnd(false) {};//默认构造函数
 	aGame(gameSettings set) ;//从配置创建
 	aGame(gameSettings set, int x, int y,int gameLevel);
@@ -32,7 +33,10 @@ public:
 	Ball* ball;//小球
 	Baffle* baffle;//挡板
 	Map* map;//砖块地图，可以用于加载残局
+	Button stop=Button(WindowWidth/10*9,WindowHeight/10*9,WindowWidth/20,WindowHeight/20);
 
+	bool ifstop() { return ifStop; }
+	void nostop() { ifStop = false; }
 	int getblood() { return blood; }
 
 	void serialize(std::ofstream& o) {
@@ -71,6 +75,7 @@ private:
 	int blood;//血量
 	bool ifEnd = false;
 	bool ifWin = false;//是否在通关状态
+	bool ifStop = false;
 	int level;//关卡
 	int xBlockNum = 10;//横向格子数
 	int yBlockNum = 10;//纵向格子数（注：因为要放挡板和小球，只有上半部分才会被砖占着）

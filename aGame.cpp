@@ -9,6 +9,7 @@ aGame::aGame(std::wstring lastgame):baffle(),ball(),map(),ifEnd(false),ifWin(fal
 	}
 	else { std::cout << "无法读取残局文件";std::wcout << (fullname); }
 	in.close();
+	stop.setString(L"暂停");
 };
 
 void aGame::gameRun() {
@@ -34,6 +35,12 @@ void aGame::gameRun() {
 	if (GetAsyncKeyState('B') & 0x8000) {//调试用，加血
 		blood++;
 	}
+	if (peekmessage(m, EX_MOUSE)) {//点击暂停
+		if (m->message == WM_LBUTTONDOWN) {
+			int x = m->x; int y = m->y;
+			if (stop.ifIn(x, y)) { ifStop = true; }
+		}
+	}
 }
 
 void aGame::gameDraw(std::wstring setname) {
@@ -41,6 +48,7 @@ void aGame::gameDraw(std::wstring setname) {
 	ball->ballDraw();
 	map->mapDraw();
 	this->displayInfo(setname);
+	stop.draw();
 }
 
 aGame::aGame(gameSettings set,int x,int y,int gameLevel) :ifWin(false), ifEnd(false), xBlockNum(x), yBlockNum(y){
@@ -54,6 +62,7 @@ aGame::aGame(gameSettings set,int x,int y,int gameLevel) :ifWin(false), ifEnd(fa
 	ball->setBall(level, set.basicV);
 	ball->linkBaffle(baffle);
 	baffle->adjust(level);
+	stop.setString(L"暂停");
 }
 
 
@@ -68,6 +77,7 @@ aGame::aGame(gameSettings set):ifWin(false), ifEnd(false) {
 	ball->setBall(level, set.basicV);
 	ball->linkBaffle(baffle);
 	baffle->adjust(level);
+	stop.setString(L"暂停");
 }
 
 void aGame::displayInfo(std::wstring setname) {//显示血量、分数,etc.
