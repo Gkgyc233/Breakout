@@ -17,9 +17,7 @@ public:
 	void check(Ball* ball,aGame* game);//检测球与砖块的碰撞并处理
 	void clear();//清图，调试用。
 
-    // 序列化：将Map对象转换为字节流
     void serialize(std::ofstream& out) const {
-        // 保存基本参数
         out.write(reinterpret_cast<const char*>(&xBlockNum), sizeof(xBlockNum));
         out.write(reinterpret_cast<const char*>(&yBlockNum), sizeof(yBlockNum));
         out.write(reinterpret_cast<const char*>(&BlockWidth), sizeof(BlockWidth));
@@ -34,9 +32,8 @@ public:
             }
         }
     }
-    // 反序列化：从字节流恢复Map对象
+
     bool deserialize(std::ifstream& in) {
-        // 读取基本参数
         if (!in.read(reinterpret_cast<char*>(&xBlockNum), sizeof(xBlockNum))) return false;
         if (!in.read(reinterpret_cast<char*>(&yBlockNum), sizeof(yBlockNum))) return false;
         if (!in.read(reinterpret_cast<char*>(&BlockWidth), sizeof(BlockWidth))) return false;

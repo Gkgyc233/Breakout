@@ -15,7 +15,7 @@ public:
 		void check(Ball* ball,aGame* game);//检测与球的碰撞并处理
 		void destroy() { brickType = 3; }//自毁，调试用。
 
-        // 序列化：将Brick对象转换为字节流
+        // 序列化：将Brick对象转换为文件
         void serialize(std::ofstream& out) const {
             out.write(reinterpret_cast<const char*>(&brickType), sizeof(brickType));
             out.write(reinterpret_cast<const char*>(&x), sizeof(x));
@@ -24,7 +24,7 @@ public:
             out.write(reinterpret_cast<const char*>(&w), sizeof(w));
         }
 
-        // 反序列化：从字节流恢复Brick对象
+        // 反序列化：从文件恢复Brick对象
         bool deserialize(std::ifstream& in) {
             if (!in.read(reinterpret_cast<char*>(&brickType), sizeof(brickType))) return false;
             if (!in.read(reinterpret_cast<char*>(&x), sizeof(x))) return false;
@@ -32,9 +32,6 @@ public:
             if (!in.read(reinterpret_cast<char*>(&h), sizeof(h))) return false;
             if (!in.read(reinterpret_cast<char*>(&w), sizeof(w))) return false;
         }
-
-
-
 
 private:
 	int brickType;//砖块类型:0-普通砖 1-耐久砖 2-坚不可摧砖 3-无砖

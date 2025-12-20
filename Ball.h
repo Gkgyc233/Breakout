@@ -36,7 +36,6 @@ public:
 		out.write(reinterpret_cast<const char*>(&limit_v), sizeof(limit_v));
 		out.write(reinterpret_cast<const char*>(&theta), sizeof(theta));
 		out.write(reinterpret_cast<const char*>(&frozen), sizeof(frozen));
-
     }
 
     bool deserialize(std::ifstream& in,Baffle* b) {
@@ -50,8 +49,6 @@ public:
 		if (!in.read(reinterpret_cast<char*>(&theta), sizeof(theta))) return false;
 		if (!in.read(reinterpret_cast<char*>(&frozen), sizeof(frozen))) return false;
         linkBaffle(b);
-        // 注意：baffle指针在反序列化后需要重新设置
-        // 这个调用linkBaffle完成
     }
 
 

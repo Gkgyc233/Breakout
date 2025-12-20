@@ -43,14 +43,14 @@ void aGame::gameDraw(std::wstring setname) {
 	this->displayInfo(setname);
 }
 
-aGame::aGame(gameSettings set,int x,int y,int k) :ifWin(false), ifEnd(false), xBlockNum(x), yBlockNum(y){
+aGame::aGame(gameSettings set,int x,int y,int gameLevel) :ifWin(false), ifEnd(false), xBlockNum(x), yBlockNum(y){
 	this->settings = set;
 	this->baffle = new Baffle();
 	this->ball = new Ball();
-	this->map = new Map(set.seed, xBlockNum, yBlockNum, set.k);
+	this->map = new Map(set.seed, xBlockNum, yBlockNum, set.gameLevel);
 	this->scores = 0;
 	this->blood = 3;
-	this->level = k;
+	this->level = gameLevel;
 	ball->setBall(level, set.basicV);
 	ball->linkBaffle(baffle);
 	baffle->adjust(level);
@@ -61,10 +61,10 @@ aGame::aGame(gameSettings set):ifWin(false), ifEnd(false) {
 	this->settings = set;
 	this->baffle = new Baffle();
 	this->ball = new Ball();
-	this->map = new Map(set.seed,xBlockNum,yBlockNum,set.k);
+	this->map = new Map(set.seed,xBlockNum,yBlockNum,set.gameLevel);
 	this->scores = 0;
 	this->blood = 3;
-	this->level = set.k;
+	this->level = set.gameLevel;
 	ball->setBall(level, set.basicV);
 	ball->linkBaffle(baffle);
 	baffle->adjust(level);

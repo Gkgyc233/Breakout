@@ -1,12 +1,12 @@
 #include"GameManager.h"
 GameManager::GameManager(IMAGE&img):img(img) {
-	std::ifstream o(mr + settings + hz, std::ios::in | std::ios::binary);
+	std::ifstream o(set_prefix + settings + set_postfix, std::ios::in | std::ios::binary);
 	if (o.is_open()) {
 		o.read((char*)&set, sizeof(set));
 		o.close();
 	}
 	else {
-		std::ofstream o(mr + settings + hz, std::ios::out | std::ios::binary);
+		std::ofstream o(set_prefix + settings + set_postfix, std::ios::out | std::ios::binary);
 		o.write((char*)&set, sizeof(set)); 
 		o.close();
 	}
@@ -120,7 +120,7 @@ void GameManager::Settings() {//配置界面
 
 		allSettingsName.clear();
 		int i = 0;
-		for (const auto& entry : std::filesystem::directory_iterator(mr)) {//可选择的配置文件的按钮
+		for (const auto& entry : std::filesystem::directory_iterator(set_prefix)) {//可选择的配置文件的按钮
 			if (entry.is_regular_file()) {
 				Button* set = new Button(WindowWidth / 2, WindowHeight / 10 *(2+ i), WindowWidth / 5, WindowHeight / 25);
 				set->setString(entry.path().filename());
@@ -143,7 +143,7 @@ void GameManager::Settings() {//配置界面
 						std::wstring nextconfig = i->Word();
 						settings = nextconfig.substr(0,nextconfig.length()-7);//修改当前配置文件
 
-						std::ifstream ss(mr + nextconfig, std::ios::in | std::ios::binary);
+						std::ifstream ss(set_prefix + nextconfig, std::ios::in | std::ios::binary);
 						ss.read((char*)&set, sizeof(set));
 						ss.close();
 
@@ -199,7 +199,7 @@ void GameManager::create(){
 		}
 	}
 	std::wstring configName = s;
-	std::wstring fullPath = mr + configName + hz;
+	std::wstring fullPath = set_prefix + configName + set_postfix;
 
 	if (std::filesystem::exists(fullPath)) {
 		int choice = MessageBox(GetHWnd(),
@@ -283,7 +283,7 @@ void GameManager::create(){
 	gameSettings a;
 	a.basicV = basicV;
 	a.seed = seed;
-	a.k = gamelevel;
+	a.gameLevel = gamelevel;
 
 	std::ofstream o(fullPath, std::ios::out | std::ios::binary);
 	o.write((char*)&a, sizeof(a));
@@ -585,7 +585,7 @@ bool GameManager::createLastgame(bool ready) {
 	}
 
 	if (!ready) {//创建新残局
-		int x, y, k;
+		int x, y, gameLevel;
 		{
 		wchar_t bufferX[30] = { 0 };
 		int resultX = InputBox(bufferX, 30,
@@ -634,8 +634,8 @@ bool GameManager::createLastgame(bool ready) {
 			return false; // 用户取消
 		}
 		try {
-			k = std::stoi(bufferK);
-			if (k < 1 || k > 10) {
+			gameLevel = std::stoi(bufferK);
+			if (gameLevel < 1 || gameLevel > 10) {
 				MessageBox(GetHWnd(), L"游戏等级必须在1到10之间", L"输入错误", MB_OK | MB_ICONERROR);
 				return false;
 			}
@@ -649,7 +649,7 @@ bool GameManager::createLastgame(bool ready) {
 		std::wstring confirmMsg = L"配置信息：\n"
 			L"横向砖块数：" + std::to_wstring(x) + L"\n" +
 			L"纵向砖块数：" + std::to_wstring(y) + L"\n" +
-			L"游戏等级：" + std::to_wstring(k) + L"\n\n" +
+			L"游戏等级：" + std::to_wstring(gameLevel) + L"\n\n" +
 			L"是否采用当前配置创建残局？";
 
 		int confirm = MessageBox(GetHWnd(), confirmMsg.c_str(), L"确认配置", MB_YESNO | MB_ICONQUESTION);
@@ -657,7 +657,7 @@ bool GameManager::createLastgame(bool ready) {
 			return false;
 		}
 	}
-		aGame* game = new aGame(set,x,y,k);
+		aGame* game = new aGame(set,x,y,gameLevel);
 		bool ifcontinue = true;
 		brickType t = Normal;
 		while (ifcontinue) {

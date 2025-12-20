@@ -49,7 +49,7 @@ class GameManager
 	void LoseDraw();//失败界面绘制
 
 public:
-	GameManager();
+	GameManager();//默认构造函数
 	GameManager(IMAGE& img);
 	void draw();//整体的绘制函数//根据不同状态调用不同的绘制函数
 	void run();//游戏运行，检查输入信号，切换界面

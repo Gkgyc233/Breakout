@@ -13,8 +13,8 @@ const int WallHeight = WindowHeight / 16;//Ç½±Ú¸ß¶È(WindowHeight * 40 / 640)
 const int MapWidth = WindowWidth * 70 / 108;
 const int MapHeight = WindowHeight * 20 / 64;
 
-const std::wstring hz = L".config";
-const std::wstring mr = L".\\config\\";
+const std::wstring set_postfix = L".config";
+const std::wstring set_prefix = L".\\config\\";
 
 const std::wstring lastgame_prefix = L".\\endgames\\";
 const std::wstring lastgame_postfix = L".end";
@@ -84,11 +84,3 @@ void adjustHeight(int aimWidth, LPCTSTR text) {//ÓÃ¶ş·Ö²éÕÒÑ°ÕÒºÏÊÊµÄ×ÖºÅ¸ß¶È£¬Ê
 	settextstyle(min, 0, _T("Consolas"));
 	return;
 }
-
-/*
-ÎÒÃÇ¹æ¶¨£º
-gameLevelÖ»Ó°ÏìballµÄËÙ¶ÈºÍbaffleµÄ¿í¶È£»
-ballµÄÊµ¼ÊËÙ¶ÈÓÉbase_vºÍgameLevel×ÛºÏ¶øÀ´
-²Ğ¾ÖĞÅÏ¢¸²¸ÇÅäÖÃĞÅÏ¢
-
-*/
